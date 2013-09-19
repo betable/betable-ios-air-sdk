@@ -22,11 +22,11 @@ Once you have an instance of the singleton, you can set up your event listeners 
 
 ####Authorizing
 
-When you have an instance of the Betable object authorization is pretty simple.  You simple call `betable.authorize(<Client ID>, <Client Secret>, <Redirect URI>)`.  This will hit the iOS SDK and complete an in app authorization flow. When the authorization finishes, whether it was successful or not, the Betable instance will dispatch an Authorization Event. (See [Authorization Event][]) for more info)
+When you have an instance of the Betable object authorization is pretty simple.  You simple call `betable.authorize(<Client ID>, <Client Secret>, <Redirect URI>)`.  This will hit the iOS SDK and complete an in app authorization flow. When the authorization finishes, whether it was successful or not, the Betable instance will dispatch an Authorization Event. (See [Authorize Event](#authorize-event) for more info)
 
-####Making Bets
+#### <a id="making-bets"></a> Making Bets
 
-There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent][] types: one for success and the other for failure.
+There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent](#bet-event) types: one for success and the other for failure.
 
 `betable.bet(<Game ID>, <Data>[, <Bet ID>])`:
 
@@ -44,7 +44,7 @@ Often games will win you the ability to play a bonus game or a mini-game.  These
 
 This call is similar to a credit bet, but like its regular bet counter part, it only uses the math model, and doesn't do any accounting.
 
-####Batching Bets
+#### Batching Bets
 
 If you need to make a series of calls to the Betable API sometimes it makes more sense to make them as one batch instead of sending each synchronously.  You can see more info on how batching bets works [here](https://developers.betable.com/docs/#batch-requests).
 
@@ -57,19 +57,19 @@ To make bets to the batch you use the following calls:
 		public function batchCreditBet(batchID:String, gameID:String, creditGameID:String, data:Object):void;
 		public function batchUnbackedCreditBet(batchID:String, gameID:String, creditGameID:String, data:Object):void;
 
-They are identical to the calls in [Making Bets][] except that they each pass in the batchID first.
+They are identical to the calls in [Making Bets](#making-bets) except that they each pass in the batchID first.
 
 When you are done adding bets to the batch you can execute it like so:
 
 	betable.run_batch(<Batch ID>);
 
-This will fire the batch request. When the batch is done running it will fire one of two BatchEvents.  Either `BatchEvent.BATCH_COMPLETED` if it was successfully completed or `BatchEvent.BATCH_ERROR` if there was an error.  See [Batch Event][] for more info.
+This will fire the batch request. When the batch is done running it will fire one of two BatchEvents.  Either `BatchEvent.BATCH_COMPLETED` if it was successfully completed or `BatchEvent.BATCH_ERROR` if there was an error.  See [Batch Event](#batch-event) for more info.
 
 ### Events
 
 There are 4 events that you can listen for: Authorize Event, Batch Event, Bet Event, and User Event. **All of the events have a property called `data` that is an object that holds all of the info for the event.**
 
-#### Authorize Event
+#### <a id="authorize-event"></a>Authorize Event
 
 Authorize events are sent during the authorization process and cover user canceling, completing or failing the authorization process.
 
@@ -87,7 +87,7 @@ This is called when an error occurs during the authorization flow. The data prop
 
 This is called if the user aborts the authorization flow at any point. It does not have any data associated with it.
 
-#### Bet Event
+#### <a id="bet-event"></a>Bet Event
 
 Bet events are sent after bets are made to confirm that they have been successfully completed. When you issue a bet you should wait for the event to return before updating the UI.
 
@@ -111,7 +111,7 @@ Every type of bet has 2 events associated with it. `CREATED` and `ERROR` The dat
 
 `BetEvent.UNBACKED_CREDIT_BET_ERROR`
 
-#### Batch Event
+#### <a id="batch-event"></a>Batch Event
 
 Batch events are used to communicate the status of a batch request. If a Batch successfully runs it will fire a `BetEvent.BATCH_COMPLETED` with a data property that represents a JSON decoded object of server response from the batch request.  Documentation on this JSON can be found [here](https://developers.betable.com/docs/#batch-requests).  If there is an error then you will receive a `BetEvent.BATCH_ERROR` with a data object containing `code`, `domain`, and `user_info`, which describe what the nature of the error is.
 
