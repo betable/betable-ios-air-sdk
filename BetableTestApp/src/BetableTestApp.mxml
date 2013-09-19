@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" applicationComplete="debug()">
+
+		<s:VGroup left="10" top="10" right="10" bottom="10" width="100%">
+			<s:Button label="Authorize" width="100%" click="authorize()"/>
+			<s:Button label="Bet" width="100%" click="bet()"/>
+			<s:Button label="Unbacked Bet" width="100%" click="unbackedBet()"/>
+			<s:Button label="Credit Bet" width="100%" click="creditBet()"/>
+			<s:Button label="UB Credit Bet" width="100%" click="unbackedCreditBet()"/>
+			<s:Button label="Batched Bet" width="100%" click="batchRequest()"/>
+			<s:Button label="Wallet" width="100%" click="wallet()"/>
+			<s:Button label="Account" width="100%" click="account()"/>
+		</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import com.betable.sdk.Betable;
+			
+			trace('ppopp')
+			
+			private function debug() : void {
+				trace('log')
+				trace('foo')
+			}
+			
+			private static var betable:Betable = Betable.instance;
+			private function authorize():void  {
+				betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize");
+			}
+			private function bet():void {
+				betable.bet("Cm0QnIXtvp6fzZOL3ymORq", {
+					paylines:[[1,1,1]],
+					currency: "GBP",
+					economy: "sandbox",  
+					wager: "0.01"
+				});
+			}
+			private function unbackedBet():void {
+				betable.unbackedBet("Cm0QnIXtvp6fzZOL3ymORq", {
+					paylines:[[1,1,1]], 
+					wager: "0.01"
+				});
+			}
+			private function creditBet():void {
+				betable.creditBet("Cm0QnIXtvp6fzZOL3ymORq", "YZIJyG1Wsl_rLGvFAlp89C", {
+					"currency": "GBP",
+					"economy": "sandbox",  
+					"wager": "0.01"
+				});
+			}
+			private function unbackedCreditBet():void {
+				betable.unbackedCreditBet("Cm0QnIXtvp6fzZOL3ymORq", "YZIJyG1Wsl_rLGvFAlp89C", {
+					"wager": "0.01"
+				});
+			}
+			private function batchRequest():void {
+				var batchID:String = betable.createBatchRequest();
+				
+				betable.batchBet(batchID, "Cm0QnIXtvp6fzZOL3ymORq", {
+					"paylines":[[1,1,1]],
+					"currency": "GBP",
+					"economy": "sandbox",  
+					"wager": "0.01"
+				});
+				betable.batchUnbackedBet(batchID, "Cm0QnIXtvp6fzZOL3ymORq", {
+					"paylines":[[1,1,1]], 
+					"wager": "0.01"
+				});
+				betable.batchCreditBet(batchID, "Cm0QnIXtvp6fzZOL3ymORq", "YZIJyG1Wsl_rLGvFAlp89C", {
+					"currency": "GBP",
+					"economy": "sandbox",  
+					"wager": "0.01"
+				});
+				betable.batchUnbackedCreditBet(batchID, "Cm0QnIXtvp6fzZOL3ymORq", "YZIJyG1Wsl_rLGvFAlp89C", {
+					"wager": "0.01"
+				});
+				
+				betable.runBatch(batchID);
+			}
+			private function logout():void {
+				//todo nothing
+			}
+			private function wallet():void {
+				betable.wallet();
+			}
+			private function account():void {
+				betable.account();
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:Application>

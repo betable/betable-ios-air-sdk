@@ -1,0 +1,23 @@
+<extension xmlns="http://ns.adobe.com/air/extension/3.8"> 
+    <id>com.betable.sdk</id> 
+    <versionNumber>0.0.1</versionNumber> 
+    <platforms>
+		<platform name="iPhone-ARM"> 
+            <applicationDeployment> 
+                <nativeLibrary>libBetableAirSDK.a</nativeLibrary> 
+                <initializer>BetableExtensionInitializer</initializer>
+                <finalizer>BetableExtensionFinalizer</finalizer>
+            </applicationDeployment>
+        </platform>
+		<platform name="iPhone-x86"> 
+            <applicationDeployment> 
+                <nativeLibrary>libBetableAirSDK.a</nativeLibrary> 
+                <initializer>BetableExtensionInitializer</initializer>
+                <finalizer>BetableExtensionFinalizer</finalizer>
+            </applicationDeployment>
+        </platform>
+        <platform name="default">
+            <applicationDeployment/>
+        </platform>
+    </platforms> 
+</extension>

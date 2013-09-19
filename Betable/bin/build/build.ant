@@ -1,0 +1,61 @@
+<project name="Betable" default="init" basedir=".">
+    <description>
+        Building the ANE
+    </description>
+    <property name="ADT_JAR" location="/Applications/Adobe Flash Builder 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/lib/adt.jar"/>
+    <property name="ADT_CMD" location="/Applications/Adobe Flash Builder 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin/adt"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+  </target>
+
+  <target name="organize" depends="init"
+        description="Move files around" >
+    <unzip src="Betable.swc" dest="ios" />
+    <delete file="ios/catalog.swf"/>
+  </target>
+
+  <target name="build" depends="organize"
+        description="build the ANE" >
+    <exec executable="${ADT_CMD}">
+        <arg value="-package"/>
+        <arg value="-target"/>
+        <arg value="ane"/>
+        <arg value="Betable.ane"/>
+        <arg value="extension.xml"/>
+        <arg value="-swc"/>
+        <arg value="Betable.swc"/>
+        <arg value="-platform"/>
+        <arg value="default"/>
+        <arg value="-C"/>
+        <arg value="default"/>
+        <arg value="."/>
+        <arg value="-platform"/>
+        <arg value="iPhone-ARM"/>
+        <arg value="-platformoptions"/>
+        <arg value="ios/platformoptions.xml"/>
+        <arg value="./Betable.framework"/>
+        <arg value="-C"/>
+        <arg value="ios"/>
+        <arg value="."/>
+        <arg value="-platform"/>
+        <arg value="iPhone-x86"/>
+        <arg value="-platformoptions"/>
+        <arg value="ios/platformoptions.xml"/>
+        <arg value="./Betable.framework"/>
+        <arg value="-C"/>
+        <arg value="ios"/>
+        <arg value="."/>
+    </exec>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the extra files -->
+    <delete file="ios/library.swf"/>
+    <delete file="Betable.swc"/>
+    <delete file="Betable.ane"/>
+  </target>
+</project>
+

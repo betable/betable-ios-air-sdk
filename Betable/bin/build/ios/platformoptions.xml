@@ -1,0 +1,10 @@
+<platform xmlns="http://ns.adobe.com/air/extension/3.8"> 
+    <sdkVersion>6.1</sdkVersion>
+    <linkerOptions> 
+            <option>-framework Betable</option> 
+            <option>-liconv</option> 
+    </linkerOptions>
+    <packagedDependencies> 
+        <packagedDependency>Betable.framework</packagedDependency> 
+    </packagedDependencies>
+</platform>

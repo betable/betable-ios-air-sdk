@@ -1,0 +1,21 @@
+<project name="Betable" default="init" basedir=".">
+    <description>
+        Building the ANE
+    </description>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+  </target>
+
+  <target name="organize" depends="init"
+        description="Move files around" >
+    <unzip src="BetableDefault.swc" dest="../../Betable/bin/build/default" />
+    <delete file="../../Betable/bin/build/default/catalog.swf"/>
+  </target>
+
+  <target name="build" depends="organize" description="Build Betable.ane">
+      <ant antfile="../../Betable/bin/build/default/catalog.swf" target="compile"/>
+  </target>
+
+</project>

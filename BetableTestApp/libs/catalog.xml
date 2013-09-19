@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding ="utf-8"?>
+<swc xmlns="http://www.adobe.com/flash/swccatalog/9">
+  <versions>
+    <swc version="1.2" />
+    <flex version="4.6.0" build="23201" minimumSupportedVersion="3.0.0" />
+  </versions>
+  <features>
+    <feature-script-deps />
+    <feature-files />
+  </features>
+  <libraries>
+    <library path="library.swf">
+      <script name="com/betable/sdk/events/AuthorizeEvent" mod="1378857787000" signatureChecksum="240352794" >
+        <def id="com.betable.sdk.events:AuthorizeEvent" /> 
+        <dep id="flash.utils:Dictionary" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="com/betable/sdk/events/BetEvent" mod="1378854984000" signatureChecksum="1847832326" >
+        <def id="com.betable.sdk.events:BetEvent" /> 
+        <dep id="flash.utils:Dictionary" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="com/betable/sdk/events/UserEvent" mod="1378856261000" signatureChecksum="3595005500" >
+        <def id="com.betable.sdk.events:UserEvent" /> 
+        <dep id="flash.utils:Dictionary" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <script name="_3f05f2b0581b16dd7590047b82172199f208e31b7ffb7f7b9fde8a847fd97ebe_flash_display_Sprite" mod="1378858479151" signatureChecksum="2034268875" >
+        <def id="_3f05f2b0581b16dd7590047b82172199f208e31b7ffb7f7b9fde8a847fd97ebe_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
+      <script name="com/betable/sdk/Betable" mod="1378858478000" signatureChecksum="4037699188" >
+        <def id="com.betable.sdk:Betable" /> 
+        <dep id="JSON" type="e" /> 
+        <dep id="com.betable.sdk.events:AuthorizeEvent" type="e" /> 
+        <dep id="com.betable.sdk.events:BatchEvent" type="e" /> 
+        <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="com.betable.sdk.events:BetEvent" type="e" /> 
+        <dep id="flash.external:ExtensionContext" type="e" /> 
+        <dep id="flash.utils:Dictionary" type="e" /> 
+        <dep id="Error" type="e" /> 
+        <dep id="com.betable.sdk.events:UserEvent" type="e" /> 
+        <dep id="flash.events:StatusEvent" type="s" /> 
+        <dep id="flash.external:ExtensionContext" type="s" /> 
+        <dep id="flash.utils:Dictionary" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:EventDispatcher" type="i" /> 
+        <dep id="Object" type="i" /> 
+      </script>
+      <script name="com/betable/sdk/events/BatchEvent" mod="1378856356000" signatureChecksum="1320114589" >
+        <def id="com.betable.sdk.events:BatchEvent" /> 
+        <dep id="flash.utils:Dictionary" type="s" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.events:Event" type="i" /> 
+      </script>
+      <digests>
+        <digest type="SHA-256" signed="false" value="9cc738cb066701e1a47da56de0d5cdb446cb4891db5c6dfa1d525baf679cb826"   />
+      </digests>
+    </library>
+  </libraries>
+  <files>
+  </files>
+</swc>
