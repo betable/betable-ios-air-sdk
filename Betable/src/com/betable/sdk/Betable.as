@@ -56,7 +56,7 @@ package com.betable.sdk
 			}
 		}
 		
-		public function bet(gameID:String, data:Object):void {
+		public function bet(gameID:String, data:Object, betID:String=null):void {
 			trace(JSON.stringify(data));
 			extContext.call( "bet", gameID, JSON.stringify(data) );
 		}
