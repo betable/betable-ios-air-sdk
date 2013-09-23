@@ -25,7 +25,7 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="com/betable/sdk/Betable" mod="1379525623000" signatureChecksum="815823867" >
+      <script name="com/betable/sdk/Betable" mod="1379969509000" signatureChecksum="1467517475" >
         <def id="com.betable.sdk:Betable" /> 
         <dep id="JSON" type="e" /> 
         <dep id="trace" type="e" /> 
@@ -47,19 +47,19 @@
         <dep id="flash.events:EventDispatcher" type="i" /> 
         <dep id="Object" type="i" /> 
       </script>
-      <script name="_2955e93144fa79b6101e1486d6d75f10b0d13f14b8d9086a2b47c52963b6ace9_flash_display_Sprite" mod="1379536821045" signatureChecksum="1803516189" >
-        <def id="_2955e93144fa79b6101e1486d6d75f10b0d13f14b8d9086a2b47c52963b6ace9_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
       <script name="com/betable/sdk/events/BatchEvent" mod="1379524863000" signatureChecksum="2429308165" >
         <def id="com.betable.sdk.events:BatchEvent" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
+      <script name="_6ad19192f57110940c14bf01cba2e5426633e93fca40e2a4c2b6ff31a8d78170_flash_display_Sprite" mod="1379972032078" signatureChecksum="3531962781" >
+        <def id="_6ad19192f57110940c14bf01cba2e5426633e93fca40e2a4c2b6ff31a8d78170_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="bc6b54ccedb45bb4d30e792ba75e5a652b4de9192e4baa1414cc7a9e32ee6b57"   />
+        <digest type="SHA-256" signed="false" value="c0b6fdf6eeb52535fe6a1fb24d029ba0610d295533f41f5d0b43f1cd927e82aa"   />
       </digests>
     </library>
   </libraries>

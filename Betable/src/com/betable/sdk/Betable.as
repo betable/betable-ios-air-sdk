@@ -56,21 +56,21 @@ package com.betable.sdk
 			}
 		}
 		
-		public function bet(gameID:String, data:Object, betID:String=null):void {
+		public function bet(gameID:String, data:Object, nonce:String=null):void {
 			trace(JSON.stringify(data));
-			extContext.call( "bet", gameID, JSON.stringify(data) );
+			extContext.call( "bet", gameID, JSON.stringify(data), nonce);
 		}
 		
-		public function unbackedBet(gameID:String, data:Object):void {
-			extContext.call( "unbackedBet", gameID, JSON.stringify(data) );
+		public function unbackedBet(gameID:String, data:Object, nonce:String=null):void {
+			extContext.call( "unbackedBet", gameID, JSON.stringify(data), nonce);
 		}
 		
-		public function creditBet(gameID:String, creditGameID:String, data:Object):void {
-			extContext.call( "creditBet", gameID, creditGameID, JSON.stringify(data) );
+		public function creditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
+			extContext.call( "creditBet", gameID, creditGameID, JSON.stringify(data), nonce);
 		}
 		
-		public function unbackedCreditBet(gameID:String, creditGameID:String, data:Object):void {
-			extContext.call( "unbackedCreditBet", gameID, creditGameID, JSON.stringify(data) );
+		public function unbackedCreditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
+			extContext.call( "unbackedCreditBet", gameID, creditGameID, JSON.stringify(data), nonce);
 		}
 		
 		public function wallet():void {

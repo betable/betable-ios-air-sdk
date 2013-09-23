@@ -34,9 +34,6 @@ FREObject authorize(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
     NSString *clientID = getStringFromArgs(argv, 0);
     NSString *clientSecret = getStringFromArgs(argv, 1);
     NSString *redirectURI = getStringFromArgs(argv, 2);
-    NSLog(@"===================================================");
-    NSLog(@"REDIRECT URI:%@",redirectURI);
-    NSLog(@"===================================================");
     betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI];
     UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
     [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
@@ -66,14 +63,27 @@ FREObject handleOpenURL(FREContext ctx, void* funcData, uint32_t argc, FREObject
     return nil;
 }
 
+NSDictionary *addBetNonce(NSDictionary* data, NSString *nonce) {
+    if (nonce) {
+        NSMutableDictionary *mutData = [data mutableCopy];
+        mutData[@"nonce"] = nonce;
+        data = [NSDictionary dictionaryWithDictionary:mutData];
+    }
+    return data;
+}
+
 FREObject bet(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     
     NSString *gameID = getStringFromArgs(argv, 0);
     NSString *jsonData = getStringFromArgs(argv, 1);
+    NSString *nonce = nil;
+    if (argc > 2) {
+        nonce = getStringFromArgs(argv, 2);
+    }
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
     [betable betForGame:gameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                 encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -82,7 +92,7 @@ FREObject bet(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
             @"domain": [error domain],
             @"user_info": [error userInfo]
         };
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];
@@ -97,8 +107,13 @@ FREObject creditBet(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
     NSString *jsonData = getStringFromArgs(argv, 2);
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
+    NSString *nonce = nil;
+    if (argc > 3) {
+        nonce = getStringFromArgs(argv, 3);
+    }
+    
     [betable creditBetForGame:gameID creditGame:creditGameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.credit_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -107,7 +122,7 @@ FREObject creditBet(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.credit_bet.errored", getUTF8String(jsonString));
     }];
@@ -121,8 +136,13 @@ FREObject unbackedBet(FREContext ctx, void* funcData, uint32_t argc, FREObject a
     NSString *jsonData = getStringFromArgs(argv, 1);
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
+    NSString *nonce = nil;
+    if (argc > 2) {
+        nonce = getStringFromArgs(argv, 2);
+    }
+    
     [betable unbackedBetForGame:gameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.unbacked_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -131,7 +151,7 @@ FREObject unbackedBet(FREContext ctx, void* funcData, uint32_t argc, FREObject a
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];
@@ -146,8 +166,13 @@ FREObject unbackedCreditBet(FREContext ctx, void* funcData, uint32_t argc, FREOb
     NSString *jsonData = getStringFromArgs(argv, 2);
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
+    NSString *nonce = nil;
+    if (argc > 3) {
+        nonce = getStringFromArgs(argv, 3);
+    }
+    
     [betable unbackedCreditBetForGame:gameID creditGame:creditGameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.unbacked_credit_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -156,7 +181,7 @@ FREObject unbackedCreditBet(FREContext ctx, void* funcData, uint32_t argc, FREOb
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];

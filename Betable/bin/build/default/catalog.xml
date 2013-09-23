@@ -15,6 +15,12 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
+      <script name="_21597c752f52a52bbd6b89dd6a26aa3756957afb43e622d383a3cdfab2013d9e_flash_display_Sprite" mod="1379972032198" signatureChecksum="2971433705" >
+        <def id="_21597c752f52a52bbd6b89dd6a26aa3756957afb43e622d383a3cdfab2013d9e_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
       <script name="com/betable/sdk/events/BetEvent" mod="1379537058000" signatureChecksum="3624968814" >
         <def id="com.betable.sdk.events:BetEvent" /> 
         <dep id="AS3" type="n" /> 
@@ -25,13 +31,7 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="_c88f20a65a47da0b3ce903bce9e6b8018e711898ac52223928f5658a40667d16_flash_display_Sprite" mod="1379537058405" signatureChecksum="3247012137" >
-        <def id="_c88f20a65a47da0b3ce903bce9e6b8018e711898ac52223928f5658a40667d16_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
-      <script name="com/betable/sdk/Betable" mod="1379537045000" signatureChecksum="2793822332" >
+      <script name="com/betable/sdk/Betable" mod="1379537113000" signatureChecksum="635326306" >
         <def id="com.betable.sdk:Betable" /> 
         <dep id="JSON" type="e" /> 
         <dep id="com.betable.sdk.events:AuthorizeEvent" type="e" /> 
@@ -53,7 +53,7 @@
         <dep id="flash.events:Event" type="i" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="2617a745618b8bc94d0b5d6ca2f7383121a462cf5c51b31dab2aed210583b90f"   />
+        <digest type="SHA-256" signed="false" value="bdceedf757baecefb85bb88e65cd3a24f07a0debccb4eb15aea6add7aa307669"   />
       </digests>
     </library>
   </libraries>

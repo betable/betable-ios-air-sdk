@@ -2,7 +2,7 @@
 A library that allows AIR apps that are built for iPhone to hook into the native iOS SDK. It uses an Air Native Extension (ANE) to handle the inter language communication.
 
 ## Installing the ANE
-You can either directly download the ANE or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the right panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
+You can either directly download the [Betable ANE](https://github.com/betable/betable-ios-air-sdk/blob/master/Betable/bin/build/Betable.ane) or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the right panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
 
 ![ScreenShot](https://raw.github.com/betable/betable-ios-air-sdk/master/Images/buildpath.png)
 
@@ -26,21 +26,25 @@ When you have an instance of the Betable object authorization is pretty simple. 
 
 #### <a id="making-bets"></a> Making Bets
 
-There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent](#bet-event) types: one for success and the other for failure.
+There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent](#bet-event) types: one for success and the other for failure.
 
-`betable.bet(<Game ID>, <Data>[, <Bet ID>])`:
+#####Bet Nonce:
+
+To track bets throughout the entire system, since there is a disconnect between placing the bet through the API and listening for the bet complete or failure event on the `Betable` object, each bet takes an optional `Bet Nonce` string. You can use this string to uniquely identify bets through the whole system. It will be returned in the `data` object with the key `nonce` on the `BetEvent.\*_CREATED` or `BetEvent.\*_ERROR` events.
+
+`betable.bet(<Game ID>, <Data>[, <Bet Nonce>])`:
 
 This will issue a real bet to the game that matches `Game ID`.
 
-`betable.unbacked_bet(<Game ID>, <Data>[, <Bet ID>])`:
+`betable.unbacked_bet(<Game ID>, <Data>[, <Bet Nonce>])`:
 
 This will issue an unbacked bet to the game that matches `Game ID`. An unbacked bet is one that uses the correct math model but doesn't actually pay out the customer.  It can be used for simulated bets, or demo bets.
 
-`betable.credit_bet(<Game ID>, <Credit Game ID>, <Data>[, <Bet ID>])`:
+`betable.credit_bet(<Game ID>, <Credit Game ID>, <Data>[, <Bet Nonce>])`:
 
 Often games will win you the ability to play a bonus game or a mini-game.  These are known as credits. If you have enough credits to play a game you can make a credit bet, which will issue a bet to another game, but use credits instead of money. This other game is known as the credit game.  To make a bet to a credit game use the above call with `Game ID` being the game the user is authorized to play and `Credit Game ID` being the credit game that the user is trying to play.
 
-`betable.unbacked_credit_bet(<Game ID>, <Credit Game ID>,  <Data>[, <Bet ID>])`:
+`betable.unbacked_credit_bet(<Game ID>, <Credit Game ID>,  <Data>[, <Bet Nonce>])`:
 
 This call is similar to a credit bet, but like its regular bet counter part, it only uses the math model, and doesn't do any accounting.
 
@@ -91,7 +95,7 @@ This is called if the user aborts the authorization flow at any point. It does n
 
 Bet events are sent after bets are made to confirm that they have been successfully completed. When you issue a bet you should wait for the event to return before updating the UI.
 
-Every type of bet has 2 events associated with it. `CREATED` and `ERROR` The data associated with the `CREATED` events is the JSON decoded object of what the server returns from the API calls.  You can find documentation on that [here](https://developers.betable.com/docs/#post-gamesgameidbet). The data associated with the `ERROR` events is a object contain `code`, `domain`, and `user_info`, which describe what the nature of the error is.
+Every type of bet has 2 events associated with it. `CREATED` and `ERROR` The data associated with the `CREATED` events is the JSON decoded object of what the server returns from the API calls with the addition of a key `nonce` if you passed in an optional bet nonce when you created the bet.  You can find documentation on what the API returns [here](https://developers.betable.com/docs/#post-gamesgameidbet). The data associated with the `ERROR` events is a object contain `code`, `domain`, and `user_info`, which describe what the nature of the error is.
 
 **Types:**
 
@@ -120,3 +124,7 @@ Batch events are used to communicate the status of a batch request. If a Batch s
 `BetEvent.BATCH_COMPLETED`
 
 `BetEvent.BATCH_ERROR`
+
+### Examples
+
+There is a flash project that has an example of all of these calls with the project.  It is entitle.
