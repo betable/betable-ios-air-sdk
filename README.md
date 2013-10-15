@@ -28,7 +28,7 @@ When you have an instance of the Betable object authorization is pretty simple. 
 
 You can store and retrieve the access token from the secure keychain by using these two calls `betable.storeAccessToken(<Access Token>)` and `betable.getStoredAccessToken()` respectively. If there is an access token available, you can pass it into `betable.authorize` as the fourth argument. This will cause the `AuthorizationEvent.AUTHORIZATION_FINISHED` to fire immediately.
 
-#### <a id="making-bets"></a> Making Bets
+####<a id="making-bets"></a>Making Bets
 
 There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent](#bet-event) types: one for success and the other for failure.
 
