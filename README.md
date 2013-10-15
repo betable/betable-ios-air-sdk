@@ -36,6 +36,8 @@ There are four kinds of bets you can make: a regular bet, an unbacked bet, a cre
 
 To track bets throughout the entire system, since there is a disconnect between placing the bet through the API and listening for the bet complete or failure event on the `Betable` object, each bet takes an optional `Bet Nonce` string. You can use this string to uniquely identify bets through the whole system. It will be returned in the `data` object with the key `nonce` on the `BetEvent.*_CREATED` or `BetEvent.*_ERROR` events.
 
+#####Bet API Calls:
+
 `betable.bet(<Game ID>, <Data>[, <Bet Nonce>])`:
 
 This will issue a real bet to the game that matches `Game ID`.
