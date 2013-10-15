@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/3.8">
+<application xmlns="http://ns.adobe.com/air/application/3.9">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
@@ -116,7 +116,6 @@
 	<!-- devices supported by AIR. If you wish to restrict deployment -->
 	<!-- (i.e., to only mobile devices) then add this element and list -->
 	<!-- only the profiles which your application does support. -->
-	<!-- <supportedProfiles>desktop extendedDesktop mobileDevice extendedMobileDevice</supportedProfiles> -->
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
 	<!-- <installFolder></installFolder> -->

@@ -1,16 +1,19 @@
 
 package com.betable.sdk
 {
-	import flash.events.EventDispatcher;
-	import flash.events.StatusEvent;
-	import flash.events.InvokeEvent;
-	import flash.external.ExtensionContext;
-	import flash.utils.Dictionary;
-	import com.betable.sdk.events.BetEvent;
 	import com.betable.sdk.events.AuthorizeEvent;
 	import com.betable.sdk.events.BatchEvent;
+	import com.betable.sdk.events.BetEvent;
 	import com.betable.sdk.events.UserEvent;
+	
 	import flash.desktop.NativeApplication;
+	import flash.events.EventDispatcher;
+	import flash.events.InvokeEvent;
+	import flash.events.StatusEvent;
+	import flash.external.ExtensionContext;
+	import flash.utils.Dictionary;
+	
+	import spark.components.List;
 	
 	public class Betable extends EventDispatcher
 	{
@@ -36,11 +39,15 @@ package com.betable.sdk
 			extContext.call( "init" );
 		}
 		
-		public function authorize(clientID:String, clientSecret:String, redirectURI:String):void {
+		public function authorize(clientID:String, clientSecret:String, redirectURI:String, accessToken:String = null):void {
 			var app:NativeApplication = NativeApplication.nativeApplication;
 			app.addEventListener(InvokeEvent.INVOKE, onHandleURL);
 			this.redirectURI = redirectURI;
-			extContext.call( "authorize", clientID, clientSecret, redirectURI );
+			if (accessToken) {
+				extContext.call( "authorize", clientID, clientSecret, redirectURI, accessToken );
+			} else {
+				extContext.call( "authorize", clientID, clientSecret, redirectURI );
+			}
 		}
 		
 		public function onHandleURL(invokeEvent:InvokeEvent):void {
@@ -58,19 +65,36 @@ package com.betable.sdk
 		
 		public function bet(gameID:String, data:Object, nonce:String=null):void {
 			trace(JSON.stringify(data));
-			extContext.call( "bet", gameID, JSON.stringify(data), nonce);
+			if (nonce) {
+				extContext.call( "bet", gameID, JSON.stringify(data), nonce);
+			} else {
+				extContext.call( "bet", gameID, JSON.stringify(data));
+			}
 		}
 		
 		public function unbackedBet(gameID:String, data:Object, nonce:String=null):void {
-			extContext.call( "unbackedBet", gameID, JSON.stringify(data), nonce);
+			if (nonce) {
+				extContext.call( "unbackedBet", gameID, JSON.stringify(data), nonce);
+			} else {
+				extContext.call( "unbackedBet", gameID, JSON.stringify(data));
+			}
 		}
 		
 		public function creditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
-			extContext.call( "creditBet", gameID, creditGameID, JSON.stringify(data), nonce);
+			if (nonce) {
+				extContext.call( "creditBet", gameID, creditGameID, JSON.stringify(data), nonce);
+			} else {
+				extContext.call( "creditBet", gameID, creditGameID, JSON.stringify(data));
+			}
 		}
 		
 		public function unbackedCreditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
-			extContext.call( "unbackedCreditBet", gameID, creditGameID, JSON.stringify(data), nonce);
+			if (nonce) {
+				extContext.call( "unbackedCreditBet", gameID, creditGameID, JSON.stringify(data), nonce);
+			} else {
+				extContext.call( "unbackedCreditBet", gameID, creditGameID, JSON.stringify(data));
+				
+			}
 		}
 		
 		public function wallet():void {
@@ -105,6 +129,24 @@ package com.betable.sdk
 			extContext.call( "runBatch", batchID );
 		}
 		
+		public function storeAccessToken(accessToken:String, accessTokenKey:String=null):void {
+			if (accessTokenKey) {
+				extContext.call("storeAccessToken", accessToken, accessTokenKey);
+			}
+			extContext.call("storeAccessToken", accessToken);
+		}
+		
+		public function getStoredAccessToken(accessTokenKey:String = null):String {
+			if (accessTokenKey) {
+				return extContext.call("getStoredAccessToken", accessTokenKey) as String;
+			}
+			return extContext.call("getStoredAccessToken") as String;
+		}
+		
+		public function logout():void {
+			extContext.call("logout");
+		}
+		
 		//---------------------------------------
 		// Internal calls
 		//---------------------------------------
@@ -121,10 +163,10 @@ package com.betable.sdk
 			trace("BetableEvent: [" + event.code + "]", event.level);
 			switch(event.code) {
 				case "com.betable.authorize.finished":
-					dispatchEvent( new AuthorizeEvent( AuthorizeEvent.AUTHORIZATION_FINISHED, JSON.parse(event.level) as Dictionary) );
+					dispatchEvent( new AuthorizeEvent( AuthorizeEvent.AUTHORIZATION_FINISHED, JSON.parse(event.level)) );
 					break;
 				case "com.betable.authorize.errored":
-					dispatchEvent( new AuthorizeEvent( AuthorizeEvent.AUTHORIZATION_ERROR, JSON.parse(event.level) as Dictionary) );
+					dispatchEvent( new AuthorizeEvent( AuthorizeEvent.AUTHORIZATION_ERROR, JSON.parse(event.level)) );
 					break;
 				case "com.betable.authorize.canceled":
 					dispatchEvent( new AuthorizeEvent( AuthorizeEvent.AUTHORIZATION_CANCELED, null) );

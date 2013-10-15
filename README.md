@@ -2,7 +2,7 @@
 A library that allows AIR apps that are built for iPhone to hook into the native iOS SDK. It uses an Air Native Extension (ANE) to handle the inter language communication.
 
 ## Installing the ANE
-You can either directly download the [Betable ANE](https://github.com/betable/betable-ios-air-sdk/blob/master/Betable/bin/build/Betable.ane) or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the right panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
+You can either directly download the [Betable ANE](https://github.com/betable/betable-ios-air-sdk/raw/master/Betable/bin/build/Betable.ane) or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the right panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
 
 ![ScreenShot](https://raw.github.com/betable/betable-ios-air-sdk/master/Images/buildpath.png)
 
@@ -23,6 +23,10 @@ Once you have an instance of the singleton, you can set up your event listeners 
 ####Authorizing
 
 When you have an instance of the Betable object authorization is pretty simple.  You simple call `betable.authorize(<Client ID>, <Client Secret>, <Redirect URI>)`.  This will hit the iOS SDK and complete an in app authorization flow. When the authorization finishes, whether it was successful or not, the Betable instance will dispatch an Authorization Event. (See [Authorize Event](#authorize-event) for more info)
+
+#####Storing Credentials
+
+You can store and retrieve the access token from the secure keychain by using these two calls `betable.storeAccessToken(<Access Token>)` and `betable.getStoredAccessToken()` respectively. If there is an access token available, you can pass it into `betable.authorize` as the fourth argument. This will cause the `AuthorizationEvent.AUTHORIZATION_FINISHED` to fire immediately.
 
 #### <a id="making-bets"></a> Making Bets
 

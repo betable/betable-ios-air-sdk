@@ -1,5 +1,5 @@
 <platform xmlns="http://ns.adobe.com/air/extension/3.8"> 
-    <sdkVersion>6.1</sdkVersion>
+    <sdkVersion>7.0</sdkVersion>
     <linkerOptions> 
             <option>-framework Betable</option> 
             <option>-liconv</option> 

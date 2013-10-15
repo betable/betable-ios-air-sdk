@@ -15,7 +15,13 @@
   </target>
 
   <target name="build" depends="organize" description="Build Betable.ane">
-      <ant antfile="../../Betable/bin/build/default/catalog.swf" target="compile"/>
+      <ant antfile="../../Betable/bin/build/build.ant" target="build"/>
   </target>
 
+  <target name="clean"
+	  description="clean up" >
+	    <!-- Delete the extra files -->
+	  <delete file="../../Betable/bin/default/library.swf"/>
+  </target>
+	
 </project>

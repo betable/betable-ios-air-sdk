@@ -27,11 +27,6 @@
         <arg value="-swc"/>
         <arg value="Betable.swc"/>
         <arg value="-platform"/>
-        <arg value="default"/>
-        <arg value="-C"/>
-        <arg value="default"/>
-        <arg value="."/>
-        <arg value="-platform"/>
         <arg value="iPhone-ARM"/>
         <arg value="-platformoptions"/>
         <arg value="ios/platformoptions.xml"/>
@@ -46,6 +41,11 @@
         <arg value="./Betable.framework"/>
         <arg value="-C"/>
         <arg value="ios"/>
+        <arg value="."/>
+        <arg value="-platform"/>
+        <arg value="default"/>
+        <arg value="-C"/>
+        <arg value="default"/>
         <arg value="."/>
     </exec>
   </target>

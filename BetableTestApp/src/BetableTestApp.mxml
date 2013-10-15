@@ -3,14 +3,15 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" applicationComplete="debug()">
 
 		<s:VGroup left="10" top="10" right="10" bottom="10" width="100%">
-			<s:Button label="Authorize" width="100%" click="authorize()"/>
-			<s:Button label="Bet" width="100%" click="bet()"/>
-			<s:Button label="Unbacked Bet" width="100%" click="unbackedBet()"/>
-			<s:Button label="Credit Bet" width="100%" click="creditBet()"/>
-			<s:Button label="UB Credit Bet" width="100%" click="unbackedCreditBet()"/>
-			<s:Button label="Batched Bet" width="100%" click="batchRequest()"/>
-			<s:Button label="Wallet" width="100%" click="wallet()"/>
-			<s:Button label="Account" width="100%" click="account()"/>
+			<s:Button id="authorizeButton" label="Authorize" width="100%" click="authorize()"/>
+			<s:Button id="betButton" label="Bet" width="100%" click="bet()"/>
+			<s:Button id="unbackedBetButton" label="Unbacked Bet" width="100%" click="unbackedBet()"/>
+			<s:Button id="creditBetButton" label="Credit Bet" width="100%" click="creditBet()"/>
+			<s:Button id="unbackedCreditBetButton" label="UB Credit Bet" width="100%" click="unbackedCreditBet()"/>
+			<s:Button id="batchBetButton" label="Batched Bet" width="100%" click="batchRequest()"/>
+			<s:Button id="walletButton" label="Wallet" width="100%" click="wallet()"/>
+			<s:Button id="accountButton" label="Account" width="100%" click="account()"/>
+			<s:Button id="logoutButton" label="Logout" width="100%" click="logout()"/>
 		</s:VGroup>
 	<fx:Script>
 		<![CDATA[
@@ -23,15 +24,47 @@
 			trace('ppopp')
 			
 			private function debug() : void {
+				this['betButton'].enabled = false;
+				this['unbackedBetButton'].enabled = false;
+				this['creditBetButton'].enabled = false;
+				this['unbackedCreditBetButton'].enabled = false;
+				this['batchBetButton'].enabled = false;
+				this['walletButton'].enabled = false;
+				this['accountButton'].enabled = false;
+				this['logoutButton'].enabled = false;
+				
 				betable.addEventListener(BetEvent.BET_CREATED, handleBet);
 				betable.addEventListener(BetEvent.UNBACKED_BET_CREATED, handleBet);
 				betable.addEventListener(BetEvent.UNBACKED_CREDIT_BET_CREATED, handleBet);
 				betable.addEventListener(BetEvent.CREDIT_BET_CREATED, handleBet);
+				
+				betable.addEventListener(AuthorizeEvent.AUTHORIZATION_FINISHED, handleAuthorize);
+				
+				var accessToken:String = betable.retrieveStoredAccessToken();
+				trace("Access Token:", accessToken);
+				if (accessToken) {
+					betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", accessToken);
+					this['authorizeButton'].enabled = false;
+				}
+				
 				trace('log')
 				trace('foo')
 			}
 			private function handleBet(evt:BetEvent):void {
 				trace("Bet Nonce:", evt.data.nonce);
+			}
+			private function handleAuthorize(evt:AuthorizeEvent):void {
+				trace("Storing Access Token");
+				betable.storeAccessToken(evt.data["access_token"]);
+				this["authorizeButton"].enabled = false;
+				this['betButton'].enabled = true;
+				this['unbackedBetButton'].enabled = true;
+				this['creditBetButton'].enabled = true;
+				this['unbackedCreditBetButton'].enabled = true;
+				this['batchBetButton'].enabled = true;
+				this['walletButton'].enabled = true;
+				this['accountButton'].enabled = true;
+				this['logoutButton'].enabled = true;
 			}
 			private function authorize():void  {
 				betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize");
@@ -90,14 +123,23 @@
 				
 				betable.runBatch(batchID);
 			}
-			private function logout():void {
-				//todo nothing
-			}
 			private function wallet():void {
 				betable.wallet();
 			}
 			private function account():void {
 				betable.account();
+			}
+			private function logout():void {
+				betable.logout();
+				this["authorizeButton"].enabled = true;
+				this['betButton'].enabled = false;
+				this['unbackedBetButton'].enabled = false;
+				this['creditBetButton'].enabled = false;
+				this['unbackedCreditBetButton'].enabled = false;
+				this['batchBetButton'].enabled = false;
+				this['walletButton'].enabled = false;
+				this['accountButton'].enabled = false;
+				this['logoutButton'].enabled = false;
 			}
 		]]>
 	</fx:Script>

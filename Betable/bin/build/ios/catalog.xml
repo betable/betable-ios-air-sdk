@@ -10,6 +10,11 @@
   </features>
   <libraries>
     <library path="library.swf">
+      <script name="com/betable/sdk/error/SDKError" mod="1381240539000" signatureChecksum="1767120966" >
+        <def id="com.betable.sdk.error:SDKError" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="Error" type="i" /> 
+      </script>
       <script name="com/betable/sdk/events/AuthorizeEvent" mod="1379524863000" signatureChecksum="1129145513" >
         <def id="com.betable.sdk.events:AuthorizeEvent" /> 
         <dep id="AS3" type="n" /> 
@@ -25,7 +30,13 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="com/betable/sdk/Betable" mod="1379969509000" signatureChecksum="1467517475" >
+      <script name="_2507144017cf305980368dc2ffba18df0a936c09c14f11d32c860c8b1dd85fb2_flash_display_Sprite" mod="1381860246225" signatureChecksum="3228662193" >
+        <def id="_2507144017cf305980368dc2ffba18df0a936c09c14f11d32c860c8b1dd85fb2_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
+      <script name="com/betable/sdk/Betable" mod="1381515821000" signatureChecksum="684572412" >
         <def id="com.betable.sdk:Betable" /> 
         <dep id="JSON" type="e" /> 
         <dep id="trace" type="e" /> 
@@ -34,7 +45,6 @@
         <dep id="flash.events:StatusEvent" type="e" /> 
         <dep id="com.betable.sdk.events:BetEvent" type="e" /> 
         <dep id="flash.external:ExtensionContext" type="e" /> 
-        <dep id="flash.utils:Dictionary" type="e" /> 
         <dep id="Error" type="e" /> 
         <dep id="flash.events:InvokeEvent" type="e" /> 
         <dep id="flash.desktop:NativeApplication" type="e" /> 
@@ -52,14 +62,8 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="_6ad19192f57110940c14bf01cba2e5426633e93fca40e2a4c2b6ff31a8d78170_flash_display_Sprite" mod="1379972032078" signatureChecksum="3531962781" >
-        <def id="_6ad19192f57110940c14bf01cba2e5426633e93fca40e2a4c2b6ff31a8d78170_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="c0b6fdf6eeb52535fe6a1fb24d029ba0610d295533f41f5d0b43f1cd927e82aa"   />
+        <digest type="SHA-256" signed="false" value="6f12970cb051bda4451d33aa631a62c3726625595f4d43f6a982a9b74065a381"   />
       </digests>
     </library>
   </libraries>
