@@ -133,4 +133,4 @@ Batch events are used to communicate the status of a batch request. If a Batch s
 
 ### Examples
 
-There is a flash project that has an example of all of these calls with the project [here](https://github.com/betable/betable-ios-air-sdk/tree/master/BetableTestApp)
+There is a flash project that has an example of all of these calls with the project [here](https://github.com/betable/betable-ios-air-sdk/tree/master/BetableTestApp).
