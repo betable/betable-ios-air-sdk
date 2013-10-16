@@ -30,7 +30,7 @@ package com.betable.sdk
 		private function init():void {
 		}
 		
-		public function authorize(clientID:String, clientSecret:String, redirectURI:String):void {
+		public function authorize(clientID:String, clientSecret:String, redirectURI:String, accessToken:String = null):void {
 //			throw new SDKError("You can not authorize with ClientID and Secret on the web as it exposes the secret to the client", 500);
 		}
 		
@@ -38,19 +38,19 @@ package com.betable.sdk
 //			ExternalInterface.call("BetableAir.authorize", accessToken, swfID);
 		}
 		
-		public function bet(gameID:String, data:Object):void {
+		public function bet(gameID:String, data:Object, nonce:String=null):void {
 //			ExternalInterface.call("BetableAir.instance.bet", gameID, data);
 		}
 		
-		public function unbackedBet(gameID:String, data:Object):void {
+		public function unbackedBet(gameID:String, data:Object, nonce:String=null):void {
 //			ExternalInterface.call("BetableAir.instance.unbackedBet", gameID, data);
 		}
 		
-		public function creditBet(gameID:String, creditGameID:String, data:Object):void {
+		public function creditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
 //			ExternalInterface.call("BetableAir.instance.creditBet", gameID, creditGameID, data);
 		}
 		
-		public function unbackedCreditBet(gameID:String, creditGameID:String, data:Object):void {
+		public function unbackedCreditBet(gameID:String, creditGameID:String, data:Object, nonce:String=null):void {
 //			throw new SDKError("unbacked credit bets not supported yet");
 		}
 		
@@ -84,6 +84,15 @@ package com.betable.sdk
 		}
 		
 		public function runBatch(batchID:String):void {
+		}		
+		public function storeAccessToken(accessToken:String, accessTokenKey:String=null):void {
+		}
+		
+		public function getStoredAccessToken(accessTokenKey:String = null):String {
+			return "";
+		}
+		
+		public function logout():void {
 		}
 		
 		/**

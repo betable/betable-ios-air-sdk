@@ -116,6 +116,7 @@
 	<!-- devices supported by AIR. If you wish to restrict deployment -->
 	<!-- (i.e., to only mobile devices) then add this element and list -->
 	<!-- only the profiles which your application does support. -->
+    <!-- supportedProfiles>extendedMobileDevice</supportedProfiles -->
 
 	<!-- The subpath of the standard default installation location to use. Optional. -->
 	<!-- <installFolder></installFolder> -->
@@ -200,7 +201,7 @@
     <!-- </android> -->
 	<!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
 
-<android>
+	<android>
         <colorDepth>16bit</colorDepth>
         <manifestAdditions><![CDATA[
 			<manifest android:installLocation="auto">
@@ -245,9 +246,8 @@
 	    ]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
+	
 <extensions>
-        
-    
-    <extensionID>com.betable.sdk</extensionID>
+        <extensionID>com.betable.sdk</extensionID>
     </extensions>
 </application>

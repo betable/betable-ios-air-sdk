@@ -20,6 +20,12 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
+      <script name="_dfac2b1dff66eb2f47a86cac649c3e5ffa92f1765081da27dd87e63a9473fc76_flash_display_Sprite" mod="1381947382115" signatureChecksum="957119653" >
+        <def id="_dfac2b1dff66eb2f47a86cac649c3e5ffa92f1765081da27dd87e63a9473fc76_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
       <script name="com/betable/sdk/events/BetEvent" mod="1379537058000" signatureChecksum="3624968814" >
         <def id="com.betable.sdk.events:BetEvent" /> 
         <dep id="AS3" type="n" /> 
@@ -30,13 +36,7 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="_886022e5999df1097a3add6e2afc5ab2e133f9862e3b5a8b63e3ebc427df612e_flash_display_Sprite" mod="1381860252115" signatureChecksum="136018789" >
-        <def id="_886022e5999df1097a3add6e2afc5ab2e133f9862e3b5a8b63e3ebc427df612e_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
-      <script name="com/betable/sdk/Betable" mod="1381265031000" signatureChecksum="3693498799" >
+      <script name="com/betable/sdk/Betable" mod="1381947381000" signatureChecksum="3912403944" >
         <def id="com.betable.sdk:Betable" /> 
         <dep id="com.betable.sdk.events:AuthorizeEvent" type="e" /> 
         <dep id="com.betable.sdk.events:BatchEvent" type="e" /> 
@@ -52,7 +52,7 @@
         <dep id="flash.events:Event" type="i" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="e91ba0224067aa3dcb127c4ab440848b30ef3c988890827a2c90c9c7aa874513"   />
+        <digest type="SHA-256" signed="false" value="0adf92cc8845e0209ada84395862e281356602df6dfc2e776a3087dea9512fb2"   />
       </digests>
     </library>
   </libraries>

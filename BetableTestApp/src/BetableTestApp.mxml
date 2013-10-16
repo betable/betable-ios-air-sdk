@@ -40,7 +40,7 @@
 				
 				betable.addEventListener(AuthorizeEvent.AUTHORIZATION_FINISHED, handleAuthorize);
 				
-				var accessToken:String = betable.retrieveStoredAccessToken();
+				var accessToken:String = betable.getStoredAccessToken();
 				trace("Access Token:", accessToken);
 				if (accessToken) {
 					betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", accessToken);
