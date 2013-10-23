@@ -30,19 +30,14 @@
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
-      <script name="_2507144017cf305980368dc2ffba18df0a936c09c14f11d32c860c8b1dd85fb2_flash_display_Sprite" mod="1381875510809" signatureChecksum="3228662193" >
-        <def id="_2507144017cf305980368dc2ffba18df0a936c09c14f11d32c860c8b1dd85fb2_flash_display_Sprite" /> 
-        <dep id="flash.system:Security" type="e" /> 
-        <dep id="AS3" type="n" /> 
-        <dep id="flash.display:Sprite" type="i" /> 
-      </script>
-      <script name="com/betable/sdk/Betable" mod="1381871858000" signatureChecksum="684572412" >
+      <script name="com/betable/sdk/Betable" mod="1382563645000" signatureChecksum="2845430683" >
         <def id="com.betable.sdk:Betable" /> 
         <dep id="JSON" type="e" /> 
         <dep id="trace" type="e" /> 
         <dep id="com.betable.sdk.events:AuthorizeEvent" type="e" /> 
-        <dep id="com.betable.sdk.events:BatchEvent" type="e" /> 
         <dep id="flash.events:StatusEvent" type="e" /> 
+        <dep id="com.betable.sdk.events:BatchEvent" type="e" /> 
+        <dep id="com.betable.sdk.error:SDKError" type="e" /> 
         <dep id="com.betable.sdk.events:BetEvent" type="e" /> 
         <dep id="flash.external:ExtensionContext" type="e" /> 
         <dep id="Error" type="e" /> 
@@ -57,13 +52,19 @@
         <dep id="flash.events:EventDispatcher" type="i" /> 
         <dep id="Object" type="i" /> 
       </script>
+      <script name="_11bf14eec9415b77172183105327b044ea978962e60a39089a5d82e62704fdda_flash_display_Sprite" mod="1382563646872" signatureChecksum="3877926995" >
+        <def id="_11bf14eec9415b77172183105327b044ea978962e60a39089a5d82e62704fdda_flash_display_Sprite" /> 
+        <dep id="flash.system:Security" type="e" /> 
+        <dep id="AS3" type="n" /> 
+        <dep id="flash.display:Sprite" type="i" /> 
+      </script>
       <script name="com/betable/sdk/events/BatchEvent" mod="1379524863000" signatureChecksum="2429308165" >
         <def id="com.betable.sdk.events:BatchEvent" /> 
         <dep id="AS3" type="n" /> 
         <dep id="flash.events:Event" type="i" /> 
       </script>
       <digests>
-        <digest type="SHA-256" signed="false" value="d28125bf4c6fb4adfe8c7a6ff9769a8f2c78a0a79433a4eee99b0f48cb285adb"   />
+        <digest type="SHA-256" signed="false" value="9c2bd8cf6ec88400d93b1ede206507e09b9be13d3c280df34ef67c582371029b"   />
       </digests>
     </library>
   </libraries>

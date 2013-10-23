@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>5A346B26-79E6-4CE3-AF00-39E2978916AB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BetableAirSDK</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C1702EC1-2110-465E-91FB-B579FDC7E50C</key>
+		<string>https://github.com/betable/betable-ios-air-sdk.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BetableAirSDK/BetableAirSDK.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C1702EC1-2110-465E-91FB-B579FDC7E50C</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/betable/betable-ios-air-sdk.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C1702EC1-2110-465E-91FB-B579FDC7E50C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C1702EC1-2110-465E-91FB-B579FDC7E50C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>betable-ios-air-sdk</string>
+		</dict>
+	</array>
+</dict>
+</plist>

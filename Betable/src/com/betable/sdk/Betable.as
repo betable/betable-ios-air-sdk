@@ -1,6 +1,7 @@
 
 package com.betable.sdk
 {
+	import com.betable.sdk.error.SDKError;
 	import com.betable.sdk.events.AuthorizeEvent;
 	import com.betable.sdk.events.BatchEvent;
 	import com.betable.sdk.events.BetEvent;
@@ -11,9 +12,6 @@ package com.betable.sdk
 	import flash.events.InvokeEvent;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
-	import flash.utils.Dictionary;
-	
-	import spark.components.List;
 	
 	public class Betable extends EventDispatcher
 	{
@@ -37,17 +35,28 @@ package com.betable.sdk
 		
 		private function init():void {
 			extContext.call( "init" );
+			var app:NativeApplication = NativeApplication.nativeApplication;
+			app.addEventListener(InvokeEvent.INVOKE, onHandleURL);
 		}
 		
 		public function authorize(clientID:String, clientSecret:String, redirectURI:String, accessToken:String = null):void {
-			var app:NativeApplication = NativeApplication.nativeApplication;
-			app.addEventListener(InvokeEvent.INVOKE, onHandleURL);
 			this.redirectURI = redirectURI;
+			trace("Deciding Auth Method");
 			if (accessToken) {
+				trace("Using Access token to authorize:", accessToken);
 				extContext.call( "authorize", clientID, clientSecret, redirectURI, accessToken );
 			} else {
 				extContext.call( "authorize", clientID, clientSecret, redirectURI );
 			}
+		}
+		
+
+		public function authorizeWithAccessToken(accessToken:String, swfID:String):void {
+			throw new SDKError("You can not authorize with this method, It is only supported for the web.", 500);
+		}
+		
+		public function isWeb():Boolean {
+			return false;
 		}
 		
 		public function onHandleURL(invokeEvent:InvokeEvent):void {

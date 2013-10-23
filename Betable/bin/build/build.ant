@@ -2,8 +2,8 @@
     <description>
         Building the ANE
     </description>
-    <property name="ADT_JAR" location="/Applications/Adobe Flash Builder 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/lib/adt.jar"/>
-    <property name="ADT_CMD" location="/Applications/Adobe Flash Builder 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin/adt"/>
+    <property name="ADT_JAR" location="/Applications/Adobe Flash Builder 4.7/sdks/4.6.0/lib/adt.jar"/>
+    <property name="ADT_CMD" location="/Applications/Adobe Flash Builder 4.7/sdks/4.6.0/bin/adt"/>
 
   <target name="init">
     <!-- Create the time stamp -->

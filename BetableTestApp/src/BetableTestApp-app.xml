@@ -247,6 +247,8 @@
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
 	
+
+
 <extensions>
         <extensionID>com.betable.sdk</extensionID>
     </extensions>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" applicationComplete="debug()">
-
 		<s:VGroup left="10" top="10" right="10" bottom="10" width="100%">
 			<s:Button id="authorizeButton" label="Authorize" width="100%" click="authorize()"/>
 			<s:Button id="betButton" label="Bet" width="100%" click="bet()"/>
@@ -39,12 +38,18 @@
 				betable.addEventListener(BetEvent.CREDIT_BET_CREATED, handleBet);
 				
 				betable.addEventListener(AuthorizeEvent.AUTHORIZATION_FINISHED, handleAuthorize);
-				
-				var accessToken:String = betable.getStoredAccessToken();
-				trace("Access Token:", accessToken);
-				if (accessToken) {
-					betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", accessToken);
-					this['authorizeButton'].enabled = false;
+				var accessToken:String;
+				if (betable.isWeb()) {
+					accessToken = "u3dCjzHsNA0WeGkOgt3AbnZ7FII";
+					var swfID:String = "betable-test";
+					betable.authorizeWithAccessToken(accessToken, swfID);
+				} else {
+					accessToken = betable.getStoredAccessToken();
+					trace("Access Token:", accessToken);
+					if (accessToken) {
+						betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", accessToken);
+						this['authorizeButton'].enabled = false;
+					}
 				}
 				
 				trace('log')
@@ -141,9 +146,12 @@
 				this['accountButton'].enabled = false;
 				this['logoutButton'].enabled = false;
 			}
+			
+			override public function dispatchEvent(event:Event):Boolean
+			{
+				trace("Event Dispatched (BTA):", event);
+				return super.dispatchEvent(event);
+			}
 		]]>
 	</fx:Script>
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
 </s:Application>

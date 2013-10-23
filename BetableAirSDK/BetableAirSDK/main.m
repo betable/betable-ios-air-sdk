@@ -7,12 +7,17 @@
 //
 
 #import "FlashRuntimeExtensions.h"
+#import "STKeychain.h"
 #import <Betable/Betable.h>
 
+#define SERVICE_KEY @"com.betable.SDK"
+#define USERNAME_KEY @"com.betable.AccessToken"
 
 Betable *betable;
 NSMutableDictionary *batchRequests;
 static int batchRequestCount;
+
+#pragma mark - Utils
 
 NSString *getStringFromArgs(FREObject argv[], NSInteger index) {
     uint32_t stringLength;
@@ -26,6 +31,17 @@ const uint8_t* getUTF8String(NSString* string) {
     return (uint8_t*)[string UTF8String];
 }
 
+NSDictionary *betDataWithNonce(NSDictionary* data, NSString* nonce) {
+    if (nonce) {
+        NSMutableDictionary *mutData = [data mutableCopy];
+        [mutData setValue:nonce forKey:@"nonce"];
+        return [NSDictionary dictionaryWithDictionary:mutData];
+    }
+    return data;
+}
+
+#pragma mark - Extension Calls
+
 FREObject init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     return nil;
 }
@@ -34,26 +50,41 @@ FREObject authorize(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
     NSString *clientID = getStringFromArgs(argv, 0);
     NSString *clientSecret = getStringFromArgs(argv, 1);
     NSString *redirectURI = getStringFromArgs(argv, 2);
+    NSString *accessToken = nil;
+    if (argc > 3) {
+        accessToken = getStringFromArgs(argv, 3);
+    }
     betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI];
-    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
+    
+    NSLog(@"ANE: Deciding auth method");
+    if (accessToken) {
+        NSLog(@"ANE: Receieved Access Token, authing immediately:%@", accessToken);
+        betable.accessToken = accessToken;
         NSDictionary *data = @{@"access_token": accessToken};
         NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
-    } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
-        NSDictionary *data = @{
-                               @"code": @([error code]),
-                               @"domain": [error domain],
-                               @"user_info": [error userInfo]
-                               };
-        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
-                                                     encoding:NSUTF8StringEncoding];
-        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
-        
-    } onCancel:^{
-        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
-    }];
+    } else {
+        UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
+            NSDictionary *data = @{@"access_token": accessToken};
+            NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+                                                         encoding:NSUTF8StringEncoding];
+            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
+        } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
+            NSDictionary *data = @{
+                                   @"code": @([error code]),
+                                   @"domain": [error domain],
+                                   @"user_info": [error userInfo]
+                                   };
+            NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+                                                         encoding:NSUTF8StringEncoding];
+            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
+            
+        } onCancel:^{
+            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
+        }];
+    }
     return nil;
 }
 
@@ -63,36 +94,24 @@ FREObject handleOpenURL(FREContext ctx, void* funcData, uint32_t argc, FREObject
     return nil;
 }
 
-NSDictionary *addBetNonce(NSDictionary* data, NSString *nonce) {
-    if (nonce) {
-        NSMutableDictionary *mutData = [data mutableCopy];
-        mutData[@"nonce"] = nonce;
-        data = [NSDictionary dictionaryWithDictionary:mutData];
-    }
-    return data;
-}
-
 FREObject bet(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     
     NSString *gameID = getStringFromArgs(argv, 0);
     NSString *jsonData = getStringFromArgs(argv, 1);
-    NSString *nonce = nil;
-    if (argc > 2) {
-        nonce = getStringFromArgs(argv, 2);
-    }
+    NSString *nonce = argc > 2 ? getStringFromArgs(argv, 2) : nil;
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
     [betable betForGame:gameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
-                                                encoding:NSUTF8StringEncoding];
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
+                                                     encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
         NSDictionary *data = @{
-            @"code": @([error code]),
-            @"domain": [error domain],
-            @"user_info": [error userInfo]
-        };
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+                               @"code": @([error code]),
+                               @"domain": [error domain],
+                               @"user_info": [error userInfo]
+                               };
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];
@@ -105,15 +124,11 @@ FREObject creditBet(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
     NSString *gameID = getStringFromArgs(argv, 0);
     NSString *creditGameID = getStringFromArgs(argv, 1);
     NSString *jsonData = getStringFromArgs(argv, 2);
+    NSString *nonce = argc > 3 ? getStringFromArgs(argv, 3) : nil;
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
-    NSString *nonce = nil;
-    if (argc > 3) {
-        nonce = getStringFromArgs(argv, 3);
-    }
-    
     [betable creditBetForGame:gameID creditGame:creditGameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.credit_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -122,7 +137,7 @@ FREObject creditBet(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.credit_bet.errored", getUTF8String(jsonString));
     }];
@@ -134,15 +149,11 @@ FREObject unbackedBet(FREContext ctx, void* funcData, uint32_t argc, FREObject a
     
     NSString *gameID = getStringFromArgs(argv, 0);
     NSString *jsonData = getStringFromArgs(argv, 1);
+    NSString *nonce = argc > 2 ? getStringFromArgs(argv, 2) : nil;
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
-    NSString *nonce = nil;
-    if (argc > 2) {
-        nonce = getStringFromArgs(argv, 2);
-    }
-    
     [betable unbackedBetForGame:gameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.unbacked_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -151,7 +162,7 @@ FREObject unbackedBet(FREContext ctx, void* funcData, uint32_t argc, FREObject a
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];
@@ -164,15 +175,11 @@ FREObject unbackedCreditBet(FREContext ctx, void* funcData, uint32_t argc, FREOb
     NSString *gameID = getStringFromArgs(argv, 0);
     NSString *creditGameID = getStringFromArgs(argv, 1);
     NSString *jsonData = getStringFromArgs(argv, 2);
+    NSString *nonce = argc > 3 ? getStringFromArgs(argv, 3) : nil;
     NSDictionary *data = (NSDictionary*)[jsonData objectFromJSONString];
     
-    NSString *nonce = nil;
-    if (argc > 3) {
-        nonce = getStringFromArgs(argv, 3);
-    }
-    
     [betable unbackedCreditBetForGame:gameID creditGame:creditGameID withData:data onComplete:^(NSDictionary *data) {
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.unbacked_credit_bet.created", getUTF8String(jsonString));
     } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
@@ -181,7 +188,7 @@ FREObject unbackedCreditBet(FREContext ctx, void* funcData, uint32_t argc, FREOb
                                @"domain": [error domain],
                                @"user_info": [error userInfo]
                                };
-        NSString *jsonString = [[NSString alloc] initWithData:[addBetNonce(data, nonce) JSONData]
+        NSString *jsonString = [[NSString alloc] initWithData:[betDataWithNonce(data,nonce) JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.bet.errored", getUTF8String(jsonString));
     }];
@@ -208,7 +215,7 @@ FREObject userWallet(FREContext ctx, void* funcData, uint32_t argc, FREObject ar
     return nil;
 }
 
-FREObject userAccount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){    
+FREObject userAccount(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     [betable userAccountOnComplete:^(NSDictionary *data) {
         NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
                                                      encoding:NSUTF8StringEncoding];
@@ -329,8 +336,51 @@ FREObject runBatch(FREContext ctx, void* funcData, uint32_t argc, FREObject argv
     return nil;
 }
 
+FREObject logout(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    [betable logout];
+    
+    NSLog(@"Removing access token");
+    NSError *error;
+    [STKeychain deleteItemForUsername:USERNAME_KEY andServiceName:SERVICE_KEY error:&error];
+    if (error) {
+        NSLog(@"Error removing accessToken: %@", error);
+    }
+    return nil;
+}
+
+FREObject storeAccessToken(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *accessToken = getStringFromArgs(argv, 0);
+    
+    NSLog(@"Storing access token:%@", accessToken);
+    NSError *error;
+    [STKeychain storeUsername:USERNAME_KEY andPassword:accessToken forServiceName:SERVICE_KEY updateExisting:YES error:&error];
+    if (error) {
+        NSLog(@"Error storing accessToken <%@>: %@", accessToken, error);
+    }
+    return nil;
+}
+
+FREObject getStoredAccessToken(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    
+    NSLog(@"Retrieving access token");
+    NSError *error;
+    NSString *accessToken = [STKeychain getPasswordForUsername:USERNAME_KEY andServiceName:SERVICE_KEY error:&error];
+    if (error) {
+        NSLog(@"Error retrieving accessToken <%@>: %@", accessToken, error);
+        return nil;
+    }
+    
+    NSLog(@"Retrieved access token:%@", accessToken);
+    if (accessToken) {
+        FREObject object;
+        FRENewObjectFromUTF8([accessToken length], getUTF8String(accessToken), &object);
+        return object;
+    }
+    return nil;
+}
+
 void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet){
-    *numFunctionsToTest = 15;
+    *numFunctionsToTest = 18;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * *numFunctionsToTest);
     
@@ -395,6 +445,19 @@ void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext
     func[14].name = (const uint8_t*) "handleOpenURL";
     func[14].functionData = NULL;
     func[14].function = &handleOpenURL;
+    
+    func[15].name = (const uint8_t*) "logout";
+    func[15].functionData = NULL;
+    func[15].function = &logout;
+    
+    func[16].name = (const uint8_t*) "storeAccessToken";
+    func[16].functionData = NULL;
+    func[16].function = &storeAccessToken;
+    
+    func[17].name = (const uint8_t*) "getStoredAccessToken";
+    func[17].functionData = NULL;
+    func[17].function = &getStoredAccessToken;
+    
 }
 
 void BetableContextFinalizer(FREContext ctx)
