@@ -41,9 +41,7 @@ package com.betable.sdk
 		
 		public function authorize(clientID:String, clientSecret:String, redirectURI:String, accessToken:String = null):void {
 			this.redirectURI = redirectURI;
-			trace("Deciding Auth Method");
 			if (accessToken) {
-				trace("Using Access token to authorize:", accessToken);
 				extContext.call( "authorize", clientID, clientSecret, redirectURI, accessToken );
 			} else {
 				extContext.call( "authorize", clientID, clientSecret, redirectURI );
@@ -60,20 +58,16 @@ package com.betable.sdk
 		}
 		
 		public function onHandleURL(invokeEvent:InvokeEvent):void {
-			trace("Invoked:", invokeEvent.arguments);
 			var stringArgument:String = null;
 			if (invokeEvent.arguments.length && invokeEvent.arguments[0] is String) {
-				trace("...Casting!");
 				stringArgument = invokeEvent.arguments[0] as String;
 			}
 			if (stringArgument && !stringArgument.indexOf(redirectURI.toLowerCase())) {
-				trace("...Opening!");
 				extContext.call( "handleOpenURL",  stringArgument );
 			}
 		}
 		
 		public function bet(gameID:String, data:Object, nonce:String=null):void {
-			trace(JSON.stringify(data));
 			if (nonce) {
 				extContext.call( "bet", gameID, JSON.stringify(data), nonce);
 			} else {

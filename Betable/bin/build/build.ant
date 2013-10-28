@@ -13,7 +13,7 @@
   <target name="organize" depends="init"
         description="Move files around" >
     <unzip src="Betable.swc" dest="ios" />
-    <delete file="ios/catalog.swf"/>
+    <delete file="ios/catalog.xml"/>
   </target>
 
   <target name="build" depends="organize"

@@ -249,7 +249,10 @@
 	
 
 
+
 <extensions>
-        <extensionID>com.betable.sdk</extensionID>
+        
+    
+    <extensionID>com.betable.sdk</extensionID>
     </extensions>
 </application>
