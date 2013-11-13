@@ -22,10 +22,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		A545DB06181DE8E100126AE2 /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A545DB05181DE8E100126AE2 /* Betable.framework */; };
 		A58E76A6181872BB00D2A2A1 /* STKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = A58E76A4181872BB00D2A2A1 /* STKeychain.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A7646F17DE466C004966AF /* Foundation.framework */; };
 		A5A7647717DE466C004966AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A7647617DE466C004966AF /* main.m */; };
+		A5C3DDFF18341E8D0069A431 /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5C3DDFE18341E8D0069A431 /* Betable.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +51,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A545DB04181DE8E100126AE2 /* Betable.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Betable.bundle; sourceTree = "<group>"; };
-		A545DB05181DE8E100126AE2 /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
 		A58E76A4181872BB00D2A2A1 /* STKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKeychain.m; sourceTree = "<group>"; };
 		A58E76A5181872BB00D2A2A1 /* STKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKeychain.h; sourceTree = "<group>"; };
 		A5A7646C17DE466C004966AF /* libBetableAirSDK-Skinny.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libBetableAirSDK-Skinny.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +58,8 @@
 		A5A7647317DE466C004966AF /* BetableAirSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BetableAirSDK-Prefix.pch"; sourceTree = "<group>"; };
 		A5A7647617DE466C004966AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5A7647D17DE4A66004966AF /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		A5C3DDFD18341E8D0069A431 /* Betable.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Betable.bundle; sourceTree = "<group>"; };
+		A5C3DDFE18341E8D0069A431 /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A545DB06181DE8E100126AE2 /* Betable.framework in Frameworks */,
+				A5C3DDFF18341E8D0069A431 /* Betable.framework in Frameworks */,
 				A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,8 +95,8 @@
 		A5A7646E17DE466C004966AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A545DB04181DE8E100126AE2 /* Betable.bundle */,
-				A545DB05181DE8E100126AE2 /* Betable.framework */,
+				A5C3DDFD18341E8D0069A431 /* Betable.bundle */,
+				A5C3DDFE18341E8D0069A431 /* Betable.framework */,
 				A5A7646F17DE466C004966AF /* Foundation.framework */,
 			);
 			name = Frameworks;

@@ -2,6 +2,7 @@
     <sdkVersion>7.0</sdkVersion>
     <linkerOptions> 
             <option>-framework Betable</option> 
+            <option>-framework AdSupport</option>
             <option>-liconv</option> 
     </linkerOptions>
     <packagedDependencies> 
