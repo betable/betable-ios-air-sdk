@@ -7,8 +7,9 @@
 //
 
 #import "FlashRuntimeExtensions.h"
-#import "STKeychain.h"
 #import <Betable/Betable.h>
+#import "NSDictionary+BetableAir.h"
+#import "NSString+BetableAir.h"
 
 #define SERVICE_KEY @"com.betable.SDK"
 #define USERNAME_KEY @"com.betable.AccessToken"
@@ -43,48 +44,37 @@ NSDictionary *betDataWithNonce(NSDictionary* data, NSString* nonce) {
 #pragma mark - Extension Calls
 
 FREObject init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *clientID = getStringFromArgs(argv, 0);
+    NSString *clientSecret = getStringFromArgs(argv, 1);
+    NSString *redirectURI = getStringFromArgs(argv, 2);
+    NSString *environment = getStringFromArgs(argv, 3);
+    
+    betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI environment:environment];
+    [betable launchWithOptions:@{}];
     return nil;
 }
 
 FREObject authorize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-    NSString *clientID = getStringFromArgs(argv, 0);
-    NSString *clientSecret = getStringFromArgs(argv, 1);
-    NSString *redirectURI = getStringFromArgs(argv, 2);
-    NSString *accessToken = nil;
-    if (argc > 3) {
-        accessToken = getStringFromArgs(argv, 3);
-    }
-    betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI];
-    
-    NSLog(@"ANE: Deciding auth method");
-    if (accessToken) {
-        NSLog(@"ANE: Receieved Access Token, authing immediately:%@", accessToken);
-        betable.accessToken = accessToken;
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
         NSDictionary *data = @{@"access_token": accessToken};
         NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
-    } else {
-        UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-        [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
-            NSDictionary *data = @{@"access_token": accessToken};
-            NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
-                                                         encoding:NSUTF8StringEncoding];
-            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
-        } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
-            NSDictionary *data = @{
-                                   @"code": @([error code]),
-                                   @"domain": [error domain],
-                                   @"user_info": [error userInfo]
-                                   };
-            NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
-                                                         encoding:NSUTF8StringEncoding];
-            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
-            
-        } onCancel:^{
-            FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
-        }];
-    }
+    } onFailure:^(NSURLResponse *response, NSString *responseBody, NSError *error) {
+        NSDictionary *data = @{
+                               @"code": @([error code]),
+                               @"domain": [error domain],
+                               @"user_info": [error userInfo]
+                               };
+        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+                                                     encoding:NSUTF8StringEncoding];
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
+        
+    } onCancel:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
+    }];
+
     return nil;
 }
 
@@ -338,49 +328,78 @@ FREObject runBatch(FREContext ctx, void* funcData, uint32_t argc, FREObject argv
 
 FREObject logout(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     [betable logout];
-    
-    NSLog(@"Removing access token");
-    NSError *error;
-    [STKeychain deleteItemForUsername:USERNAME_KEY andServiceName:SERVICE_KEY error:&error];
-    if (error) {
-        NSLog(@"Error removing accessToken: %@", error);
-    }
     return nil;
 }
 
 FREObject storeAccessToken(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
-    NSString *accessToken = getStringFromArgs(argv, 0);
-    
-    NSLog(@"Storing access token:%@", accessToken);
-    NSError *error;
-    [STKeychain storeUsername:USERNAME_KEY andPassword:accessToken forServiceName:SERVICE_KEY updateExisting:YES error:&error];
-    if (error) {
-        NSLog(@"Error storing accessToken <%@>: %@", accessToken, error);
-    }
+    [betable storeAccessToken];
     return nil;
 }
 
 FREObject getStoredAccessToken(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
-    
-    NSLog(@"Retrieving access token");
-    NSError *error;
-    NSString *accessToken = [STKeychain getPasswordForUsername:USERNAME_KEY andServiceName:SERVICE_KEY error:&error];
-    if (error) {
-        NSLog(@"Error retrieving accessToken <%@>: %@", accessToken, error);
-        return nil;
-    }
-    
-    NSLog(@"Retrieved access token:%@", accessToken);
-    if (accessToken) {
+    if ([betable loadStoredAccessToken]) {
         FREObject object;
-        FRENewObjectFromUTF8([accessToken length], getUTF8String(accessToken), &object);
+        FRENewObjectFromUTF8([[NSNumber numberWithInteger:betable.accessToken.length] intValue], getUTF8String(betable.accessToken), &object);
         return object;
     }
     return nil;
 }
 
+FREObject showWallet(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *jsonString = @"";
+    if (argc > 0) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 0)} JSONData]
+                                                     encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable walletInViewController:rootVC onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
+FREObject showDeposit(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *jsonString = @"";
+    if (argc > 0) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 0)} JSONData]
+                                           encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable depositInViewController:rootVC onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
+FREObject showWithdraw(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *jsonString = @"";
+    if (argc > 0) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 0)} JSONData]
+                                           encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable withdrawInViewController:rootVC onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
+FREObject showRedeem(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *promotion = getStringFromArgs(argv, 0);
+    NSString *jsonString = @"";
+    if (argc > 1) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 1)} JSONData]
+                                           encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable redeemPromotion:promotion inViewController:rootVC onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
 void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet){
-    *numFunctionsToTest = 18;
+    *numFunctionsToTest = 22;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * *numFunctionsToTest);
     
@@ -457,6 +476,22 @@ void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext
     func[17].name = (const uint8_t*) "getStoredAccessToken";
     func[17].functionData = NULL;
     func[17].function = &getStoredAccessToken;
+    
+    func[18].name = (const uint8_t*) "showWallet";
+    func[18].functionData = NULL;
+    func[18].function = &showWallet;
+    
+    func[19].name = (const uint8_t*) "showDeposit";
+    func[19].functionData = NULL;
+    func[19].function = &showDeposit;
+    
+    func[20].name = (const uint8_t*) "showWithdraw";
+    func[20].functionData = NULL;
+    func[20].function = &showWithdraw;
+    
+    func[21].name = (const uint8_t*) "showRedeem";
+    func[21].functionData = NULL;
+    func[21].function = &showRedeem;
     
 }
 

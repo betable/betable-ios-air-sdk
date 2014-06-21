@@ -14,9 +14,10 @@
 @property (readonly) BOOL loadedVerification;
 
 - (NSURL*)apiURL;
-- (NSURL*)authURL;
 - (void)verify:(void(^)(void))onComplete;
 
 @property (readonly) BOOL hasProfile;
-
+- (NSString*)decorateURL:(NSString*)path forClient:(NSString*)clientID withParams:(NSDictionary*)aParams;
+- (NSString*)decorateTrackURLForClient:(NSString*)clientID withAction:(NSString*)action;
+- (NSString*)decorateTrackURLForClient:(NSString*)clientID withAction:(NSString*)action andParams:(NSDictionary*)aParams;
 @end

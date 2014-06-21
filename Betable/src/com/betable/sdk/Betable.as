@@ -6,6 +6,7 @@ package com.betable.sdk
 	import com.betable.sdk.events.BatchEvent;
 	import com.betable.sdk.events.BetEvent;
 	import com.betable.sdk.events.UserEvent;
+	import com.betable.sdk.events.WebviewEvent;
 	
 	import flash.desktop.NativeApplication;
 	import flash.events.EventDispatcher;
@@ -19,13 +20,15 @@ package com.betable.sdk
 		private static var _instance:Betable;
 		private var redirectURI:String;
 		private var extContext:ExtensionContext;
-
+		public static function setup(clientID:String, clientSecret:String, redirectURI:String, environment:String):Betable {
+			_instance = new Betable( new SingletonEnforcer() );
+			_instance.init(clientID, clientSecret, redirectURI, environment);
+			return _instance;
+		}
 		public static function get instance():Betable {
 			if ( !_instance ) {
-				_instance = new Betable( new SingletonEnforcer() );
-				_instance.init();
+				throw "You must call setup before you can reference the betable instance";
 			}
-			
 			return _instance;
 		}
 		
@@ -33,19 +36,15 @@ package com.betable.sdk
 		// API Calls
 		//---------------------------------------
 		
-		private function init():void {
-			extContext.call( "init" );
+		private function init(clientID:String, clientSecret:String, redirectURI:String, environment:String):void {
+			this.redirectURI = redirectURI;
+			extContext.call( "init" , clientID, clientSecret, redirectURI, environment);
 			var app:NativeApplication = NativeApplication.nativeApplication;
 			app.addEventListener(InvokeEvent.INVOKE, onHandleURL);
 		}
 		
-		public function authorize(clientID:String, clientSecret:String, redirectURI:String, accessToken:String = null):void {
-			this.redirectURI = redirectURI;
-			if (accessToken) {
-				extContext.call( "authorize", clientID, clientSecret, redirectURI, accessToken );
-			} else {
-				extContext.call( "authorize", clientID, clientSecret, redirectURI );
-			}
+		public function authorize():void {
+			extContext.call( "authorize" );
 		}
 		
 
@@ -100,6 +99,38 @@ package com.betable.sdk
 			}
 		}
 		
+		public function showWallet(nonce:String=null):void {
+			if (nonce) {
+				extContext.call( "showWallet", nonce);
+			} else {
+				extContext.call( "showWallet");
+			}
+		}
+		
+		public function showDeposit(nonce:String=null):void {
+			if (nonce) {
+				extContext.call( "showDeposit", nonce);
+			} else {
+				extContext.call( "showDeposit");
+			}
+		}
+		
+		public function showWithdraw(nonce:String=null):void {
+			if (nonce) {
+				extContext.call( "showWithdraw", nonce);
+			} else {
+				extContext.call( "showWithdraw");
+			}
+		}
+		
+		public function showRedeem(url:String, nonce:String=null):void {
+			if (nonce) {
+				extContext.call( "showRedeem", url, nonce);
+			} else {
+				extContext.call( "showRedeem", url);
+			}
+		}
+		
 		public function wallet():void {
 			extContext.call( "userWallet" );
 		}
@@ -132,17 +163,11 @@ package com.betable.sdk
 			extContext.call( "runBatch", batchID );
 		}
 		
-		public function storeAccessToken(accessToken:String, accessTokenKey:String=null):void {
-			if (accessTokenKey) {
-				extContext.call("storeAccessToken", accessToken, accessTokenKey);
-			}
+		public function storeAccessToken(accessToken:String):void {
 			extContext.call("storeAccessToken", accessToken);
 		}
 		
-		public function getStoredAccessToken(accessTokenKey:String = null):String {
-			if (accessTokenKey) {
-				return extContext.call("getStoredAccessToken", accessTokenKey) as String;
-			}
+		public function getStoredAccessToken():String {
 			return extContext.call("getStoredAccessToken") as String;
 		}
 		
@@ -215,6 +240,13 @@ package com.betable.sdk
 					break;
 				case "com.betable.user.batch.errored":
 					dispatchEvent( new BatchEvent( BatchEvent.BATCH_ERROR, JSON.parse(event.level)) );
+					break;
+				case "com.betable.webview.closed":
+					var level:String = event.level
+					if (!level || !level.length) {
+						level = "{}";
+					}
+					dispatchEvent( new WebviewEvent( WebviewEvent.CLOSE, JSON.parse(level)) );
 					break;
 				default:
 					break;

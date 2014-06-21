@@ -22,10 +22,11 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		A58E76A6181872BB00D2A2A1 /* STKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = A58E76A4181872BB00D2A2A1 /* STKeychain.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A7646F17DE466C004966AF /* Foundation.framework */; };
 		A5A7647717DE466C004966AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A7647617DE466C004966AF /* main.m */; };
-		A5C3DDFF18341E8D0069A431 /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5C3DDFE18341E8D0069A431 /* Betable.framework */; };
+		A5B102371954E5CB00D3F01F /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5B102361954E5CB00D3F01F /* Betable.framework */; };
+		A5B2865F1953C1FA00566561 /* NSDictionary+BetableAir.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B2865C1953C1FA00566561 /* NSDictionary+BetableAir.m */; };
+		A5B286601953C1FA00566561 /* NSString+BetableAir.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B2865E1953C1FA00566561 /* NSString+BetableAir.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,15 +52,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A58E76A4181872BB00D2A2A1 /* STKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKeychain.m; sourceTree = "<group>"; };
-		A58E76A5181872BB00D2A2A1 /* STKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKeychain.h; sourceTree = "<group>"; };
 		A5A7646C17DE466C004966AF /* libBetableAirSDK-Skinny.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libBetableAirSDK-Skinny.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A7646F17DE466C004966AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A5A7647317DE466C004966AF /* BetableAirSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BetableAirSDK-Prefix.pch"; sourceTree = "<group>"; };
 		A5A7647617DE466C004966AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5A7647D17DE4A66004966AF /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		A5B102361954E5CB00D3F01F /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
+		A5B2865B1953C1FA00566561 /* NSDictionary+BetableAir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+BetableAir.h"; sourceTree = "<group>"; };
+		A5B2865C1953C1FA00566561 /* NSDictionary+BetableAir.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+BetableAir.m"; sourceTree = "<group>"; };
+		A5B2865D1953C1FA00566561 /* NSString+BetableAir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+BetableAir.h"; sourceTree = "<group>"; };
+		A5B2865E1953C1FA00566561 /* NSString+BetableAir.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+BetableAir.m"; sourceTree = "<group>"; };
 		A5C3DDFD18341E8D0069A431 /* Betable.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Betable.bundle; sourceTree = "<group>"; };
-		A5C3DDFE18341E8D0069A431 /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5C3DDFF18341E8D0069A431 /* Betable.framework in Frameworks */,
+				A5B102371954E5CB00D3F01F /* Betable.framework in Frameworks */,
 				A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,8 +98,8 @@
 		A5A7646E17DE466C004966AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A5B102361954E5CB00D3F01F /* Betable.framework */,
 				A5C3DDFD18341E8D0069A431 /* Betable.bundle */,
-				A5C3DDFE18341E8D0069A431 /* Betable.framework */,
 				A5A7646F17DE466C004966AF /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -105,8 +108,10 @@
 		A5A7647117DE466C004966AF /* BetableAirSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A58E76A4181872BB00D2A2A1 /* STKeychain.m */,
-				A58E76A5181872BB00D2A2A1 /* STKeychain.h */,
+				A5B2865B1953C1FA00566561 /* NSDictionary+BetableAir.h */,
+				A5B2865C1953C1FA00566561 /* NSDictionary+BetableAir.m */,
+				A5B2865D1953C1FA00566561 /* NSString+BetableAir.h */,
+				A5B2865E1953C1FA00566561 /* NSString+BetableAir.m */,
 				A5A7647D17DE4A66004966AF /* FlashRuntimeExtensions.h */,
 				A5A7647617DE466C004966AF /* main.m */,
 				A5A7647217DE466C004966AF /* Supporting Files */,
@@ -181,7 +186,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nset +u\n\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=BetableAirSDK\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}-Skinny.a\"\nSF_FRAMEWORK_NAME=\"Betable.framework\"\nSF_BUNDLE_NAME=\"Betable.bundle\"\nSF_ANE_DIRECTORY=\"${PROJECT_FILE_PATH}/../../Betable/bin/build\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\necho \"xcodebuild -project ${PROJECT_FILE_PATH} -target ${TARGET_NAME} -configuration ${CONFIGURATION} -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=${BUILD_DIR} OBJROOT=${OBJROOT} BUILD_ROOT=${BUILD_ROOT} SYMROOT=${SYMROOT} $ACTION\"\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/\"\n\n# Move ANE .a file to ANE build directory\ncp -a \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\" \"${SF_ANE_DIRECTORY}/ios/\"\n# Move the framework and bundle\ncp -a \"${PROJECT_FILE_PATH}/../${SF_BUNDLE_NAME}\" \"${PROJECT_FILE_PATH}/../${SF_FRAMEWORK_NAME}\" \"${SF_ANE_DIRECTORY}\"\n(cd \"$SF_ANE_DIRECTORY\" && ant -buildfile build.ant build)";
+			shellScript = "set -e\nset +u\n\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=BetableAirSDK\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}-Skinny.a\"\nSF_FRAMEWORK_NAME=\"Betable.framework\"\nSF_BUNDLE_NAME=\"Betable.bundle\"\nSF_ANE_DIRECTORY=\"${PROJECT_FILE_PATH}/../../Betable/bin/build\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\necho \"xcodebuild -project ${PROJECT_FILE_PATH} -target ${TARGET_NAME} -configuration ${CONFIGURATION} -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=${BUILD_DIR} OBJROOT=${OBJROOT} BUILD_ROOT=${BUILD_ROOT} SYMROOT=${SYMROOT} $ACTION\"\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/\"\n\n# Move ANE .a file to ANE build directory\ncp -a \"${BUILT_PRODUCTS_DIR}/lib${SF_TARGET_NAME}.a\" \"${SF_ANE_DIRECTORY}/ios/\"\n# Move the framework and bundle\ncp -pR \"${PROJECT_FILE_PATH}/../${SF_BUNDLE_NAME}\" \"${PROJECT_FILE_PATH}/../${SF_FRAMEWORK_NAME}\" \"${SF_ANE_DIRECTORY}\"\n(cd \"$SF_ANE_DIRECTORY\" && ant -buildfile build.ant build)";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -191,8 +196,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A58E76A6181872BB00D2A2A1 /* STKeychain.m in Sources */,
 				A5A7647717DE466C004966AF /* main.m in Sources */,
+				A5B2865F1953C1FA00566561 /* NSDictionary+BetableAir.m in Sources */,
+				A5B286601953C1FA00566561 /* NSString+BetableAir.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,7 +238,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos7.1;
 				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
 			name = Debug;
@@ -255,7 +261,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				SDKROOT = iphoneos7.0;
+				SDKROOT = iphoneos7.1;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s i386";
 			};
@@ -271,6 +277,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"/Users/thauber/src/github.com/betable/betable-ios-air-sdk/BetableAirSDK",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BetableAirSDK/BetableAirSDK-Prefix.pch";
@@ -297,6 +304,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"/Users/thauber/src/github.com/betable/betable-ios-air-sdk/BetableAirSDK",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BetableAirSDK/BetableAirSDK-Prefix.pch";

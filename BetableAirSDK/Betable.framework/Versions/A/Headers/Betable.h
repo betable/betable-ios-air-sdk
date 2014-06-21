@@ -29,22 +29,39 @@
 #import <Betable/BetableWebViewController.h>
 #import <Betable/BetableHandlers.h>
 #import <Betable/BetableBatchRequest.h>
+#import <Betable/BetableTracking.h>
+#import <Betable/BetableTrackingHistory.h>
+#import <Betable/BetableTrackingUtil.h>
 
-@interface NSDictionary (BetableJSON)
-- (NSData*)JSONData;
-@end
+static NSString * const BetableEnvironmentSandbox    = @"sandbox";
+static NSString * const BetableEnvironmentProduction = @"production";
 
-@interface NSString (BetableJSON)
-- (NSObject*)objectFromJSONString;
-@end
 
 @class BetableWebViewController;
 
 @interface Betable : NSObject
 
-- (Betable*)initWithClientID:(NSString*)clientID clientSecret:(NSString*)clientSecret redirectURI:(NSString*)redirectURI;
+- (Betable*)initWithClientID:(NSString*)clientID clientSecret:(NSString*)clientSecret redirectURI:(NSString*)redirectURI environment:(NSString*)environment;
 
-- (Betable*)initWithAccessToken:(NSString*)aAccessToken;
+//This method is used to provide BetableSDK with the launch options for the app, it also allows betable to do install attribution for any ads that directed people to this app
+
+//      |launchOptions| - The launch options of the application when the
+//          delegate method applicationDidLaunchWithOptions: is called.
+- (void)launchWithOptions:(NSDictionary*)launchOptions;
+
+//This method is used to retrieve a stored access token for a player who
+//   has authorized with betable.
+//
+//    Throws exception if you have not launched betable yet
+//
+- (BOOL)loadStoredAccessToken;
+
+//This method is used to store the access token for a player who has
+//authorized with betable.
+//
+//    Throws exception if the player has not authorized already
+//
+- (void)storeAccessToken;
 
 // This method is called when no access token exists for the current user. It
 // will initiate the OAuth flow. It will bounce the user to the Safari app that
@@ -64,6 +81,53 @@
 // handle the response.
 - (void)authorizeInViewController:(UIViewController*)viewController onAuthorizationComplete:(BetableAccessTokenHandler)onComplete onFailure:(BetableFailureHandler)onFailure onCancel:(BetableCancelHandler)onCancel;
 
+// This method is called when the user chooses to deposit money. It will display the external/cobranded version of the deposit flow
+
+//      |onClose| - this block will be called when the webview is closed,
+//          it will not send any information about the nature of the deposit.
+- (void)depositInViewController:(UIViewController*)viewController onClose:(BetableCancelHandler)onClose;
+
+// This method is called when the user chooses to withdraw money. It will display the external/cobranded version of the withdraw flow.
+
+//      |onClose| - this block will be called when the webview is closed,
+//          it will not send any information about the nature of the withdraw.
+- (void)withdrawInViewController:(UIViewController*)viewController onClose:(BetableCancelHandler)onClose;
+
+// This method is called when the user chooses to withdraw money. It will display the external/cobranded version of the withdraw flow.
+
+//      |promotionURL| - This is the url that you generated on your server
+//          using your client secret for your promotion, for more details:
+//
+//              https://developers.betable.com/docs/api/#promotion-api
+//.
+//      |onClose| - this block will be called when the webview is closed,
+//          it will not send any information about the nature of the
+//          promotion.
+//
+//       NOTE: Your redirect URI will also be called.
+//
+- (void)redeemPromotion:(NSString*)promotionURL inViewController:(UIViewController*)viewController onClose:(BetableCancelHandler)onClose;
+
+// This method is called when the user chooses to see their wallet or account. It will display the external/cobranded version of their wallet.
+//
+//      |onClose| - this block will be called when the webview is closed,
+//          it will not send any information about the nature of the
+//          promotion.
+//
+
+- (void)walletInViewController:(UIViewController*)viewController onClose:(BetableCancelHandler)onClose;
+
+// This method allows developers to open a web view to any betable page, it takes care for any
+//
+//      |path| - the path on betable.com you would like to go to
+//
+//      |viewController| - the ViewController in which to modally display
+//          this web view
+//      |onClose| - this block will be called when the webview is closed,
+//          it will not send any information about the nature of the
+//          promotion.
+//
+- (void)loadBetablePath:(NSString*)path inViewController:(UIViewController*)viewController withParams:(NSDictionary*)params onClose:(BetableCancelHandler)onClose;
 
 // Once you have your access code from the application:handleOpenURL: of your
 // UIApplicationDelegate after betable redirects to your app uri you can pass

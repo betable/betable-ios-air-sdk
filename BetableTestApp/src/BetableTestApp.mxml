@@ -17,7 +17,7 @@
 			import com.betable.sdk.Betable;
 			import com.betable.sdk.events.*;
 			
-			private static var betable:Betable = Betable.instance;
+			private static var betable:Betable = Betable.setup("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", "sandbox");
 			private static var betID:Number = 0;
 			
 			trace('ppopp')
@@ -38,29 +38,22 @@
 				betable.addEventListener(BetEvent.CREDIT_BET_CREATED, handleBet);
 				
 				betable.addEventListener(AuthorizeEvent.AUTHORIZATION_FINISHED, handleAuthorize);
-				var accessToken:String;
-				if (betable.isWeb()) {
-					accessToken = "u3dCjzHsNA0WeGkOgt3AbnZ7FII";
-					var swfID:String = "betable-test";
-					betable.authorizeWithAccessToken(accessToken, swfID);
-				} else {
-					accessToken = betable.getStoredAccessToken();
-					trace("Access Token:", accessToken);
-					if (accessToken) {
-						betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", accessToken);
-						this['authorizeButton'].enabled = false;
-					}
+
+				var accessToken:String = betable.getStoredAccessToken();
+				trace("Access Token:", accessToken);
+				if (accessToken) {
+					this.doAuthorization(accessToken);
 				}
-				
-				trace('log')
-				trace('foo')
 			}
 			private function handleBet(evt:BetEvent):void {
 				trace("Bet Nonce:", evt.data.nonce);
 			}
 			private function handleAuthorize(evt:AuthorizeEvent):void {
+				this.doAuthorization(evt.data["access_token"]);
+			}
+			private function doAuthorization(accessToken:String):void {
 				trace("Storing Access Token");
-				betable.storeAccessToken(evt.data["access_token"]);
+				betable.storeAccessToken(accessToken);
 				this["authorizeButton"].enabled = false;
 				this['betButton'].enabled = true;
 				this['unbackedBetButton'].enabled = true;
@@ -72,7 +65,7 @@
 				this['logoutButton'].enabled = true;
 			}
 			private function authorize():void  {
-				betable.authorize("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize");
+				betable.authorize();
 			}
 			private function bet():void {
 				betable.bet("Cm0QnIXtvp6fzZOL3ymORq", {
@@ -129,10 +122,10 @@
 				betable.runBatch(batchID);
 			}
 			private function wallet():void {
-				betable.wallet();
+				betable.showDeposit();
 			}
 			private function account():void {
-				betable.account();
+				betable.showWallet();
 			}
 			private function logout():void {
 				betable.logout();
