@@ -17,7 +17,7 @@
 			import com.betable.sdk.Betable;
 			import com.betable.sdk.events.*;
 			
-			private static var betable:Betable = Betable.setup("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize", "sandbox");
+			private static var betable:Betable = Betable.setup("EOlWJmI20G8ksXzuHiDXJ6UFzkicYr1u", "NEWUN5cKMptwDWHimda2f7BO4SsagHFu", "betable+Cm0QnIXtvp6fzZOL3ymORq://authorize");
 			private static var betID:Number = 0;
 			
 			trace('ppopp')
@@ -122,10 +122,10 @@
 				betable.runBatch(batchID);
 			}
 			private function wallet():void {
-				betable.showDeposit();
+				betable.showWallet();
 			}
 			private function account():void {
-				betable.showWallet();
+				betable.showBetablePage('/ext/wallet/balance');
 			}
 			private function logout():void {
 				betable.logout();

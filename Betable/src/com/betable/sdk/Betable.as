@@ -20,9 +20,9 @@ package com.betable.sdk
 		private static var _instance:Betable;
 		private var redirectURI:String;
 		private var extContext:ExtensionContext;
-		public static function setup(clientID:String, clientSecret:String, redirectURI:String, environment:String):Betable {
+		public static function setup(clientID:String, clientSecret:String, redirectURI:String):Betable {
 			_instance = new Betable( new SingletonEnforcer() );
-			_instance.init(clientID, clientSecret, redirectURI, environment);
+			_instance.init(clientID, clientSecret, redirectURI);
 			return _instance;
 		}
 		public static function get instance():Betable {
@@ -36,9 +36,9 @@ package com.betable.sdk
 		// API Calls
 		//---------------------------------------
 		
-		private function init(clientID:String, clientSecret:String, redirectURI:String, environment:String):void {
+		private function init(clientID:String, clientSecret:String, redirectURI:String):void {
 			this.redirectURI = redirectURI;
-			extContext.call( "init" , clientID, clientSecret, redirectURI, environment);
+			extContext.call( "init" , clientID, clientSecret, redirectURI);
 			var app:NativeApplication = NativeApplication.nativeApplication;
 			app.addEventListener(InvokeEvent.INVOKE, onHandleURL);
 		}
@@ -129,6 +129,17 @@ package com.betable.sdk
 			} else {
 				extContext.call( "showRedeem", url);
 			}
+		}
+		
+		public function showBetablePage(path:String, params:Object=null, nonce:String=null):void {
+			if (!params) {
+				params = {};
+			}
+			if (nonce) {
+				extContext.call( "showBetablePage", path, JSON.stringify(params), nonce);
+			} else {
+				extContext.call( "showBetablePage", path, JSON.stringify(params));
+		    }
 		}
 		
 		public function wallet():void {

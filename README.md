@@ -2,33 +2,101 @@
 A library that allows AIR apps that are built for iPhone to hook into the native iOS SDK. It uses an Air Native Extension (ANE) to handle the inter language communication.
 
 ## Installing the ANE
-You can either directly download the [Betable ANE](https://github.com/betable/betable-ios-air-sdk/raw/master/Betable/bin/build/Betable.ane) or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the right panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
+You can either directly download the [Betable ANE](https://github.com/betable/betable-ios-air-sdk/raw/master/Betable/bin/build/Betable.ane) or you can download the projects and build it. Once you have the ANE you can right click on your project in FlashBuilder and go select `properties` from the menu. (1) When the dialog opens select `Flex Build Path` from the left panel. (2) In the top panel find the tab for `Native Extensions`. (3) on the right there will be 4 buttons, you should select `Add ANE`.
 
 ![ScreenShot](https://raw.github.com/betable/betable-ios-air-sdk/master/Images/buildpath.png)
 
-Finally in the left panel you need to select uncollapse `Flex Build Packaging` and select `Apple iOS`.  (2) In the right panel find the tab for `Native Extensions`. Betable.ane should be in the list with a green checkmark next to it. (3) Make sure to check the box under Package.
+Finally in the left panel you need to (1) select uncollapse `Flex Build Packaging` and select `Apple iOS`.  (2) In the top panel find the tab for `Native Extensions`. Betable.ane should be in the list with a green checkmark next to it. (3) Make sure to check the box under Package.
 
 ![ScreenShot](https://raw.github.com/betable/betable-ios-air-sdk/master/Images/packaging.png)
 
 ##Using the API
 
-Simply import `com.betable.sdk.Betable` into your project, and you can access the Betable object through the instance property.
+Simply import `com.betable.sdk.Betable` into your project.
+
+After that you simply need to set up your Betable instance.
+
+	var betable:Betable = Betable.setup(<Client ID>, <Client Secret>, <Redirect URI>);
+
+**NOTE: It is very important the the betable object be set up on app launch. This is required to properly attribute installations.**
+
+After that you can access the Betable object through the instance property.
 
     var betable:Betable = Betable.instance;
 
 Once you have an instance of the singleton, you can set up your event listeners and issue calls against it.
 
-###API Calls
+###Authorizing
 
-####Authorizing
-
-When you have an instance of the Betable object authorization is pretty simple.  You simple call `betable.authorize(<Client ID>, <Client Secret>, <Redirect URI>)`.  This will hit the iOS SDK and complete an in app authorization flow. When the authorization finishes, whether it was successful or not, the Betable instance will dispatch an Authorization Event. (See [Authorize Event](#authorize-event) for more info)
+When you have an instance of the Betable object authorization is pretty simple.  You simple call `betable.authorize()`.  This will hit the iOS SDK and complete an in app authorization flow. When the authorization finishes, whether it was successful or not, the Betable instance will dispatch an Authorization Event. (See [Authorize Event](#authorize-event) for more info)
 
 #####Storing Credentials
 
-You can store and retrieve the access token from the secure keychain by using these two calls `betable.storeAccessToken(<Access Token>)` and `betable.getStoredAccessToken()` respectively. If there is an access token available, you can pass it into `betable.authorize` as the fourth argument. This will cause the `AuthorizationEvent.AUTHORIZATION_FINISHED` to fire immediately.
+You can store and retrieve the access token from the secure keychain by using these two calls `betable.storeAccessToken()` and `betable.getStoredAccessToken()` respectively. If an access token has previously been stored, then getStoredAccessToken will return the access token and also store it on the `Betable` object. If it has not been stored it will return `null`.
 
-####<a id="making-bets"></a>Making Bets
+Here is an example of it's use:
+
+    this.betable = Betable.setup(client_id, client_secret, redirect_uri);
+    betable.addEventListener(AuthorizeEvent.AUTHORIZATION_FINISHED, handleAuthorize);
+    var accessToken:String = this.betable.getStoredAccessToken();
+    if (accessToken) {
+        handleAuthorization(accessToken)
+    } else {
+        betable.authorize();
+    }
+
+###Opening Web Views
+
+There is now support to open a web view for most destinations.
+
+####Deposit Flow
+
+  	 betable.showDeposit(nonce:String = null);
+	
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+
+####Wallet Page
+
+  	 betable.showWallet(nonce:String = null);
+	
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+
+####Withdraw Flow
+
+  	 betable.showWithdraw(nonce:String = null);
+	
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+####Redemption Flow
+
+  	 betable.showRedeem(promotionURL:String, nonce:String = null);
+	
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+
+**promotionURL** is the unencoded version of a signed developer promotion url. For more information. (Read the [docs](https://developers.betable.com/docs/api/#promotion-api) on signed developer promotion URLs for more details)
+
+####Support Page
+
+  	 betable.showSupport(nonce:String = null);
+	
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+
+####Any Other Page
+
+  	 betable.showBetablePage(path:String, params:object = null, nonce:String = null);
+
+**path** is the path on betable.com that you would like to take a user to.
+
+**params** this is a object of the params that will be appended to the url as a query string as `&<key>=<value>`.
+
+**nonce** is used to differentiate events that come in when the web view is closed. The WebviewEvent.CLOSE event will have a property called `data` where a nonce will reside if one was passed into the call that initiated this response.
+
+
+###<a id="making-bets"></a>Making Bets
 
 There are four kinds of bets you can make: a regular bet, an unbacked bet, a credit bet, and an unbacked credit bet.  Each one takes a data object which will be encoded as JSON and sent straight to the API (See more [here](https://developers.betable.com/docs/#post-gamesgameidbet)), and Each one has a corresponding set of [BetEvent](#bet-event) types: one for success and the other for failure.
 

@@ -47,9 +47,8 @@ FREObject init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     NSString *clientID = getStringFromArgs(argv, 0);
     NSString *clientSecret = getStringFromArgs(argv, 1);
     NSString *redirectURI = getStringFromArgs(argv, 2);
-    NSString *environment = getStringFromArgs(argv, 3);
     
-    betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI environment:environment];
+    betable = [[Betable alloc] initWithClientID:clientID clientSecret:clientSecret redirectURI:redirectURI];
     [betable launchWithOptions:@{}];
     return nil;
 }
@@ -233,7 +232,7 @@ FREObject createBatchRequest(FREContext ctx, void* funcData, uint32_t argc, FREO
     NSString *batchID = [NSString stringWithFormat:@"%d", batchRequestCount];
     batchRequests[batchID] = [[BetableBatchRequest alloc] initWithBetable:betable];
     FREObject object;
-    FRENewObjectFromUTF8([batchID length], getUTF8String(batchID), &object);
+    FRENewObjectFromUTF8([[NSNumber numberWithInteger:[batchID length]] intValue], getUTF8String(batchID), &object);
     return object;
 }
 
@@ -384,6 +383,19 @@ FREObject showWithdraw(FREContext ctx, void* funcData, uint32_t argc, FREObject 
     return nil;
 }
 
+FREObject showSupport(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *jsonString = @"";
+    if (argc > 0) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 0)} JSONData]
+                                           encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable supportInViewController:rootVC onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
 FREObject showRedeem(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
     NSString *promotion = getStringFromArgs(argv, 0);
     NSString *jsonString = @"";
@@ -398,8 +410,27 @@ FREObject showRedeem(FREContext ctx, void* funcData, uint32_t argc, FREObject ar
     return nil;
 }
 
+FREObject showBetablePage(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
+    NSString *path = getStringFromArgs(argv, 0);
+    NSDictionary *data = nil;
+    if (argc > 1) {
+        NSString *jsonData = getStringFromArgs(argv, 1);
+        data = (NSDictionary*)[jsonData objectFromJSONString];
+    }
+    NSString *jsonString = @"";
+    if (argc > 2) {
+        jsonString = [[NSString alloc] initWithData:[@{@"nonce":getStringFromArgs(argv, 2)} JSONData]
+                                           encoding:NSUTF8StringEncoding];
+    }
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [betable loadBetablePath:path inViewController:rootVC withParams:data onClose:^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.webview.closed", getUTF8String(jsonString));
+    }];
+    return nil;
+}
+
 void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet){
-    *numFunctionsToTest = 22;
+    *numFunctionsToTest = 24;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * *numFunctionsToTest);
     
@@ -489,10 +520,17 @@ void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext
     func[20].functionData = NULL;
     func[20].function = &showWithdraw;
     
-    func[21].name = (const uint8_t*) "showRedeem";
+    func[21].name = (const uint8_t*) "showSupport";
     func[21].functionData = NULL;
-    func[21].function = &showRedeem;
+    func[21].function = &showSupport;
     
+    func[22].name = (const uint8_t*) "showRedeem";
+    func[22].functionData = NULL;
+    func[22].function = &showRedeem;
+    
+    func[23].name = (const uint8_t*) "showBetablePage";
+    func[23].functionData = NULL;
+    func[23].function = &showBetablePage;
 }
 
 void BetableContextFinalizer(FREContext ctx)
