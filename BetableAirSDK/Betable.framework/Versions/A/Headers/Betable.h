@@ -81,6 +81,10 @@ static NSString * const BetableEnvironmentProduction = @"production";
 // handle the response.
 - (void)authorizeInViewController:(UIViewController*)viewController onAuthorizationComplete:(BetableAccessTokenHandler)onComplete onFailure:(BetableFailureHandler)onFailure onCancel:(BetableCancelHandler)onCancel;
 
+// Same as authorizeInViewController excepts takes them to login instead of
+// register
+- (void)authorizeLoginInViewController:(UIViewController*)viewController onAuthorizationComplete:(BetableAccessTokenHandler)onComplete onFailure:(BetableFailureHandler)onFailure onCancel:(BetableCancelHandler)onCancel;
+
 // This method is called when the user chooses to deposit money. It will display the external/cobranded version of the deposit flow
 
 //      |onClose| - this block will be called when the webview is closed,

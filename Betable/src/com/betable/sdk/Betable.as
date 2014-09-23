@@ -47,6 +47,13 @@ package com.betable.sdk
 			extContext.call( "authorize" );
 		}
 		
+		public function authorizeLogin():void {
+			extContext.call( "authorizeLogin" );
+		}
+		
+		public function unbackedAuthorize(clientUserID:String):void {
+			extContext.call( "unbackedAuthorize" );
+		}
 
 		public function authorizeWithAccessToken(accessToken:String, swfID:String):void {
 			throw new SDKError("You can not authorize with this method, It is only supported for the web.", 500);

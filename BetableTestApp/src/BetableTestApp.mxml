@@ -3,6 +3,8 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark" applicationDPI="160" applicationComplete="debug()">
 		<s:VGroup left="10" top="10" right="10" bottom="10" width="100%">
 			<s:Button id="authorizeButton" label="Authorize" width="100%" click="authorize()"/>
+			<s:Button id="authorizeLogin" label="Authorize" width="100%" click="doAuthorizeLogin()"/>
+			<s:Button id="unbackedAuthorize" label="Authorize" width="100%" click="doUnbackedAuthorize('HELO')"/>
 			<s:Button id="betButton" label="Bet" width="100%" click="bet()"/>
 			<s:Button id="unbackedBetButton" label="Unbacked Bet" width="100%" click="unbackedBet()"/>
 			<s:Button id="creditBetButton" label="Credit Bet" width="100%" click="creditBet()"/>
@@ -66,6 +68,12 @@
 			}
 			private function authorize():void  {
 				betable.authorize();
+			}
+			private function doAuthorizeLogin():void {
+				betable.authorizeLogin();
+			}
+			private function doUnbackedAuthorize(clientUserID:String):void {
+				betable.unbackedAuthorize(clientUserID);
 			}
 			private function bet():void {
 				betable.bet("Cm0QnIXtvp6fzZOL3ymORq", {

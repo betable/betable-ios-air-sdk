@@ -41,6 +41,37 @@ NSDictionary *betDataWithNonce(NSDictionary* data, NSString* nonce) {
     return data;
 }
 
+void* authorizeWithLoginOption(BOOL loginOption, FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    BetableAccessTokenHandler onFinish = ^(NSString *accessToken) {
+        NSDictionary *data = @{@"access_token": accessToken};
+        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+                                                     encoding:NSUTF8StringEncoding];
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
+    };
+    BetableFailureHandler onFaiure = ^(NSURLResponse *response, NSString *responseBody, NSError *error) {
+        NSDictionary *data = @{
+                               @"code": @([error code]),
+                               @"domain": [error domain],
+                               @"user_info": [error userInfo]
+                               };
+        NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
+                                                     encoding:NSUTF8StringEncoding];
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
+        
+    };
+    BetableCancelHandler onCancel = ^{
+        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
+    };
+    
+    if (loginOption) {
+        [betable authorizeInViewController:rootVC onAuthorizationComplete:onFinish onFailure:onFaiure onCancel:onCancel];
+    } else {
+        [betable authorizeLoginInViewController:rootVC onAuthorizationComplete:onFinish onFailure:onFaiure onCancel:onCancel];
+    }
+    return nil;
+}
+
 #pragma mark - Extension Calls
 
 FREObject init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
@@ -54,9 +85,19 @@ FREObject init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]){
 }
 
 FREObject authorize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
-    UIViewController *rootVC = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    [betable authorizeInViewController:rootVC onAuthorizationComplete:^(NSString *accessToken) {
-        NSDictionary *data = @{@"access_token": accessToken};
+    authorizeWithLoginOption(NO, ctx, funcData, argc, argv);
+    return nil;
+}
+
+FREObject authorizeLogin(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+    authorizeWithLoginOption(YES, ctx, funcData, argc, argv);
+    return nil;
+}
+
+FREObject unbackedAuthorize(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[]) {
+    NSString *userClientID = getStringFromArgs(argv, 0);
+    [betable unbackedToken:userClientID onComplete:^(NSString *accessToken) {
+        NSDictionary *data = @{@"access_token": accessToken, @"unbacked": [NSNumber numberWithBool:YES]};
         NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.finished", getUTF8String(jsonString));
@@ -69,11 +110,7 @@ FREObject authorize(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
         NSString *jsonString = [[NSString alloc] initWithData:[data JSONData]
                                                      encoding:NSUTF8StringEncoding];
         FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.errored", getUTF8String(jsonString));
-        
-    } onCancel:^{
-        FREDispatchStatusEventAsync(ctx, (uint8_t*) "com.betable.authorize.canceled", (uint8_t*)"");
     }];
-
     return nil;
 }
 
@@ -430,7 +467,7 @@ FREObject showBetablePage(FREContext ctx, void* funcData, uint32_t argc, FREObje
 }
 
 void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet){
-    *numFunctionsToTest = 24;
+    *numFunctionsToTest = 26;
     
     FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * *numFunctionsToTest);
     
@@ -531,6 +568,14 @@ void BetableContextInitializer(void* extData, const uint8_t* ctxType, FREContext
     func[23].name = (const uint8_t*) "showBetablePage";
     func[23].functionData = NULL;
     func[23].function = &showBetablePage;
+    
+    func[24].name = (const uint8_t*) "authorizeLogin";
+    func[24].functionData = NULL;
+    func[24].function = &authorizeLogin;
+    
+    func[25].name = (const uint8_t*) "unbackedAuthorize";
+    func[25].functionData = NULL;
+    func[25].function = &unbackedAuthorize;
 }
 
 void BetableContextFinalizer(FREContext ctx)

@@ -13,6 +13,7 @@
 
 @property (nonatomic, copy) BetableCancelHandler onCancel;
 @property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *onLoadState;
 @property BOOL showInternalCloseButton;
 @property BOOL finishedLoading;
 @property BOOL portraitOnly;
