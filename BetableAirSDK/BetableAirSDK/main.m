@@ -65,9 +65,9 @@ void* authorizeWithLoginOption(BOOL loginOption, FREContext ctx, void* funcData,
     };
     
     if (loginOption) {
-        [betable authorizeInViewController:rootVC onAuthorizationComplete:onFinish onFailure:onFaiure onCancel:onCancel];
-    } else {
         [betable authorizeLoginInViewController:rootVC onAuthorizationComplete:onFinish onFailure:onFaiure onCancel:onCancel];
+    } else {
+        [betable authorizeInViewController:rootVC onAuthorizationComplete:onFinish onFailure:onFaiure onCancel:onCancel];
     }
     return nil;
 }

@@ -14,7 +14,7 @@
 		<string>https://github.com/betable/betable-ios-air-sdk.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BetableAirSDK/BetableAirSDK.xcodeproj/project.xcworkspace</string>
+	<string>BetableAirSDK/BetableAirSDK.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>F170D5D3393C5C5D81D9725F72DB36C9CBFE7246</key>
