@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BetableHandlers.h"
+#import "BetableProfile.h"
 
 @interface BetableWebViewController : UIViewController <UIWebViewDelegate, UIAlertViewDelegate>
 
