@@ -22,7 +22,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		A54BDCE61A251DE400674209 /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A54BDCE51A251DE400674209 /* Betable.framework */; };
+		A51FD8A61A3B7D3900E824C5 /* Betable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A51FD8A51A3B7D3900E824C5 /* Betable.framework */; };
 		A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5A7646F17DE466C004966AF /* Foundation.framework */; };
 		A5A7647717DE466C004966AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A7647617DE466C004966AF /* main.m */; };
 		A5B2865F1953C1FA00566561 /* NSDictionary+BetableAir.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B2865C1953C1FA00566561 /* NSDictionary+BetableAir.m */; };
@@ -52,7 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A54BDCE51A251DE400674209 /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
+		A51FD8A51A3B7D3900E824C5 /* Betable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Betable.framework; sourceTree = "<group>"; };
 		A5A7646C17DE466C004966AF /* libBetableAirSDK-Skinny.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libBetableAirSDK-Skinny.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5A7646F17DE466C004966AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		A5A7647317DE466C004966AF /* BetableAirSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BetableAirSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A54BDCE61A251DE400674209 /* Betable.framework in Frameworks */,
+				A51FD8A61A3B7D3900E824C5 /* Betable.framework in Frameworks */,
 				A5A7647017DE466C004966AF /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,7 +98,7 @@
 		A5A7646E17DE466C004966AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A54BDCE51A251DE400674209 /* Betable.framework */,
+				A51FD8A51A3B7D3900E824C5 /* Betable.framework */,
 				A5C3DDFD18341E8D0069A431 /* Betable.bundle */,
 				A5A7646F17DE466C004966AF /* Foundation.framework */,
 			);
@@ -333,6 +333,7 @@
 					arm64,
 					armv7,
 				);
+				CLANG_MODULES_AUTOLINK = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = "";
@@ -350,6 +351,7 @@
 					arm64,
 					armv7,
 				);
+				CLANG_MODULES_AUTOLINK = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALID_ARCHS = "";
