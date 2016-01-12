@@ -1,6 +1,6 @@
 # Betable Air SDK
 
-[Download the ANE Here] (https://github.com/betable/betable-ios-air-sdk/releases/download/Latest/Betable.ane)
+[Download the ANE Here] (https://github.com/betable/betable-ios-air-sdk/releases/download/1.0.1/Betable.ane)
 
 A library that allows AIR apps that are built for iPhone to hook into the native iOS SDK. It uses an Air Native Extension (ANE) to handle the inter language communication.
 
